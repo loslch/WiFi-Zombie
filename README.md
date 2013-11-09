@@ -1,9 +1,11 @@
 Wi-Fi Zombie
 ===========
 
-This project is for the [Purdue-NIPA Junior Capstone Project 2013 Fall][1] class at Purdue University.
+![Prototype image of our project](http://i42.tinypic.com/2hclv9k.png)
 
-Wi-Fi Zombie is an Open Source Wi-Fi site survey application that allows manager of network to easily get information
+This project is for the [Purdue-NIPA Junior Capstone Project 2013 Fall][1] program of class at Purdue University.
+
+Wi-Fi Zombie is an Wi-Fi site survey application that allows network manager to easily get information
 about status of thier networks with various ways like graph or heatmap.
 
 
@@ -11,9 +13,9 @@ Setting
 ----------------------------
 __1.__ In Eclipse, just import the project through "File > New > Other > Open existing android project in eclipse".
 
-__2.__ Project > Clean to generate the binaries you need, like R.java, etc.
+__2.__ Check dependencies of `SlidingMenu` and `ActionBarSherlock` that was placed `submodule` directory.
 
-__3.__ Then, check dependencies of `SlidingMenu` and `ActionBarSherlock` that was placed `submodule` directory.
+__3.__ Then, Project > Clean to generate the binaries you need, like R.java, etc.
 
 __4.__ You're good to go!
 
