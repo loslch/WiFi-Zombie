@@ -1,30 +1,33 @@
 package com.wifi_zombie;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity implements OnClickListener {
     
-    Activity root;
+    private TextView txtView;
+    private Button btnOk;
+    protected ListFragment mFrag;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        txtView = (TextView)findViewById(R.id.editText1);
+        btnOk = (Button)findViewById(R.id.button1);
+        btnOk.setOnClickListener(this);
         
-        root = this;
-        final TextView txtView = (TextView)findViewById(R.id.editText1);
-        Button btnOk = (Button)findViewById(R.id.button1);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            
-            @Override
-            public void onClick(View v) {
-                root.setTitle(txtView.getText());
-            }
-        });
+        setSlidingActionBarEnabled(true);
+    }
+    
+    @Override
+    public void onClick(View v) {
+        this.setTitle(txtView.getText());
     }
 
 }

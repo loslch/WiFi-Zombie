@@ -5,4 +5,21 @@
     
     <string name="hello_world">Hello world!</string>
 
+    <string-array name="slide_menu">
+        <item>Dashboard</item>
+        <item>On the Spot Analysis</item>
+        <item>Coverage Analysis</item>
+        <item>Settings</item>
+        <item>Help</item>
+    </string-array>
+    <string-array name="slide_menu_1">
+        <item>Access Point List</item>
+        <item>Strength Graph</item>
+        <item>Channel Graph</item>
+        <item>Rating Channel</item>
+    </string-array>
+    <string-array name="slide_menu_2">
+        <item>Indoor Survey</item>
+        <item>Outdoor Survey</item>
+    </string-array>
 </resources>
