@@ -1,16 +1,25 @@
 package com.wifi_zombie;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
+import android.view.KeyEvent;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class BaseActivity extends SlidingFragmentActivity {
 
+	private int mTitleRes;
     protected Fragment mFrag;
+
+	public BaseActivity(int titleRes) {
+		mTitleRes = titleRes;
+	}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,5 +44,34 @@ public class BaseActivity extends SlidingFragmentActivity {
         sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
         sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
     }
+
+    @Override
+    public boolean onKeyDown(int keycode, KeyEvent e) {
+    	Log.d("WIFI-Zombie", String.valueOf(keycode));
+        switch(keycode) {
+            case KeyEvent.KEYCODE_MENU:
+            	getSlidingMenu().toggle(true);
+                return true;
+        }
+
+        return super.onKeyDown(keycode, e);
+    }
     
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Exit")
+            .setMessage("Are you sure you want to exit?")
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();    
+            }
+
+        })
+        .setNegativeButton("No", null)
+        .show();
+    }
 }
