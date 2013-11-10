@@ -1,7 +1,9 @@
 package com.wifi_zombie;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +104,16 @@ public class SlideMenuFragment extends ListFragment implements OnItemClickListen
             else
                 prepareListData(isOpenSpot, true);
             setListAdapter(adapter);
+        } else if (item.tag.equals("Outdoor Survey")) {
+            currentScreen = Screen.COVERAGE;
+
+            Intent i = new Intent(getActivity(), MapActivity.class);
+            startActivity(i);
+            
+//            FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
+//            mFrag = new SlideMenuFragment();
+//            t.replace(R.id.menu_frame, mFrag);
+//            t.commit();
         } else if (item.tag.equals("Settings")) {
             currentScreen = Screen.SETTINGS;
             

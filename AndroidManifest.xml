@@ -3,23 +3,51 @@
     package="com.wifi_zombie"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    
     <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="16" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
+      android:minSdkVersion="9"
+      android:targetSdkVersion="17"/>
+    
+    <!-- General -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Google Maps API -->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <!-- External storage for caching. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- My Location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- To get Wi-Fi status -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    
+    <!-- Maps API needs OpenGL ES 2.0. -->
+    <uses-feature
+      android:glEsVersion="0x00020000"
+      android:required="true"/>
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-		android:theme="@style/AppTheme" >
+		android:theme="@style/AppTheme" 
+        android:hardwareAccelerated="true" >
+    
+        <!-- ** You need to replace the key below with your own key. **
+             The example key below will not be accepted because it is not linked to the
+             certificate which you will use to sign this application.
+             See: https://developers.google.com/maps/documentation/android/start
+             for instructions on how to get your own key. -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCl6MJVHB1X2mzfNCnfWSc8IW8gk8pz71U" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        
         <activity
             android:name="com.wifi_zombie.SplashScreen"
             android:label="@string/app_name"
@@ -34,6 +62,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifi_zombie.MapActivity"
+            android:label="@string/app_name" >
         </activity>
     </application>
 
