@@ -24,6 +24,7 @@ Dependencies
 ----------------------------
 * [Sliding Menu][2]
 * [ActionBarSherlock][3]
+* [Google Maps][7]
 
 
 Developed By
@@ -65,3 +66,4 @@ License
 [4]: http://en.knu.ac.kr/
 [5]: http://neweng.cau.ac.kr/
 [6]: http://www.purdue.edu/
+[7]: https://developers.google.com/maps/documentation/android/start#getting_the_google_maps_android_api_v2
