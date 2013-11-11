@@ -2,17 +2,25 @@ package com.wifi_zombie;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
+import com.fragments.SlideMenuFragment;
+import com.fragments.SlideMenuFragment.OnArticleSelectedListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
-public class BaseActivity extends SlidingFragmentActivity {
+public class BaseActivity extends SlidingFragmentActivity implements OnArticleSelectedListener{
 
 	private int mTitleRes;
     protected Fragment mFrag;
@@ -27,6 +35,7 @@ public class BaseActivity extends SlidingFragmentActivity {
 
         // set the Behind View
         setBehindContentView(R.layout.menu_frame);
+        
         if (savedInstanceState == null) {
             FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
             mFrag = new SlideMenuFragment();
@@ -56,8 +65,8 @@ public class BaseActivity extends SlidingFragmentActivity {
 
         return super.onKeyDown(keycode, e);
     }
-    
-    @Override
+    public void onArticleSelected(Uri articleUri){}
+  /*  @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
             .setIcon(android.R.drawable.ic_dialog_alert)
@@ -73,5 +82,5 @@ public class BaseActivity extends SlidingFragmentActivity {
         })
         .setNegativeButton("No", null)
         .show();
-    }
+    }*/
 }

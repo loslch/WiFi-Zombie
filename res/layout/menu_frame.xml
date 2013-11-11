@@ -10,9 +10,26 @@
         android:layout_height="wrap_content"
         android:src="@drawable/zombie" />
 -->
+
+	<RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="5pt"
+	    android:layout_marginBottom="5pt" >
+	    <TextView
+	        android:layout_centerHorizontal="true"
+		    android:id="@+id/txt_logo"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Wi-Fi Zombie"
+		    android:textColor="#0ab5d7"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
+	</RelativeLayout>
+
 	<FrameLayout
 	    android:id="@+id/menu_frame"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent" >
+
 	</FrameLayout>
 </LinearLayout>
