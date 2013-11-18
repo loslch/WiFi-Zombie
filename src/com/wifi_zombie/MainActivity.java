@@ -4,6 +4,8 @@ import com.fragments.SlideMenuFragment.OnArticleSelectedListener;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
+    // service manager
+    private ServiceManager wifiInfoService;
     
 	private FragmentManager fmanager = FragmentManager.getInstance();
 	private FragmentTransaction mainT;
@@ -39,6 +43,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 //		.beginTransaction()
 //		.replace(R.id.content_frame, new SampleListFragment())
 //		.commit();
+		
+		// service에서 보낸 message handler 이거를 통해서 각 fragment에 값 뿌려줌
+		wifiInfoService = new ServiceManager(this, WifiInfoManager.class, new Handler() {
+		    @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:                
+                        break;
+                } 
+            }
+        });
+        
         
         setSlidingActionBarEnabled(true);
     }
