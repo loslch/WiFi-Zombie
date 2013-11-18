@@ -27,3 +27,4 @@ proguard/
 *.ipr
 *.iws
 .idea/
+/submodule/google-play-services_lib/.settings/*.prefs

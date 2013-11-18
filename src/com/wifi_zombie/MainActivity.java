@@ -56,8 +56,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         	}
         	currentScreen = clickedMenu;
     	}
-    	
-    	
     }
     
     @Override
