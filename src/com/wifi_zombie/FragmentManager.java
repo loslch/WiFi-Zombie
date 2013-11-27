@@ -33,8 +33,8 @@ public class FragmentManager {
 		AccessPointList = new AccessPointListFragment();
 		ChannelGraph = new ChannelGraphFragment();
 		RatingChannel = new DashboardFragment();
-		IndoorSurvey = new IndoorSurveyFragment();
-		OutdoorSurvey = new OutdoorSurveyFragment();
+		IndoorSurvey = new DashboardFragment();
+		OutdoorSurvey = new DashboardFragment();
 		Settings = new DashboardFragment();
 		Help = new DashboardFragment();
 	}

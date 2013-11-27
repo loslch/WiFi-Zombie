@@ -13,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.data.DiaryData;
+import com.data.WifiDataItem;
 import com.data.WifiInfoData;
 import com.wifi_zombie.CustomAdapter;
 import com.wifi_zombie.R;

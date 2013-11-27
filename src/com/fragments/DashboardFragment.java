@@ -1,6 +1,6 @@
 package com.fragments;
 
-import com.data.DiaryData;
+import com.data.WifiDataItem;
 import com.wifi_zombie.R;
 
 import android.content.Context;
@@ -47,7 +47,7 @@ public class DashboardFragment extends MyFragment{
 //		result += super.wifidata.getWifiInfoData(i).getFrequency();
 //		result += "\nlevel : ";
 //		result += super.wifidata.getWifiInfoData(i).getStrength();
-		DiaryData item = null;
+		WifiDataItem item = null;
 		for(int i=0 ; i<super.wifidata.getSize() ; i++)
 		{
 			if(super.wifidata.getWifiInfoData(i).isConnected())

@@ -12,7 +12,6 @@ import android.view.WindowManager;
 
 public class GraphCanvasView extends View{
 
-	private Canvas thisCanvas;
 	private boolean is5G = false;
 	
 	public GraphCanvasView(Context context, AttributeSet attr) {
@@ -21,31 +20,31 @@ public class GraphCanvasView extends View{
 
 	public void onDraw(Canvas canvas) {
 	
-		thisCanvas  = canvas;
 		canvas.drawColor(Color.WHITE);		
 		if(is5G)
-			draw5Ggraph();
+			draw5Ggraph(canvas);
 		else 
-			draw2_4Ggraph();
+			draw2_4Ggraph(canvas);
 	}
 	public void setIs5G(boolean is)
 	{
 		is5G = is;
 	}
-	public void draw2_4Ggraph()
+	public void draw2_4Ggraph(Canvas canvas)
 	{
 		Log.i("wifi zombie", "2.4G draw method");
-		thisCanvas.drawColor(Color.WHITE);	
-		
-	}
-	public void draw5Ggraph()
-	{
-		Log.i("wifi zombie", "5G draw method");
-		thisCanvas.drawColor(Color.WHITE);	
-		Paint paint = new Paint();
+		canvas.drawColor(Color.WHITE);	
+Paint paint = new Paint();
 		
 		paint.setColor(Color.BLACK);
 		paint.setStrokeWidth(2);
-		thisCanvas.drawLine(5, 0, 5, this.getHeight()-30, paint);		
+		canvas.drawLine(5, 0, 5, this.getHeight()-30, paint);	
+		
+	}
+	public void draw5Ggraph(Canvas canvas)
+	{
+		Log.i("wifi zombie", "5G draw method");
+		canvas.drawColor(Color.WHITE);	
+			
 	}
 }

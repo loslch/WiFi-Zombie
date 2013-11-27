@@ -48,7 +48,7 @@ public class ChannelGraphFragment extends MyFragment {
 					changeBtn.setText("5G");
 					is5G = true;
 					graphView.setIs5G(is5G);
-					graphView.draw5Ggraph();
+					graphView.invalidate();
 				}
 			}
 		});

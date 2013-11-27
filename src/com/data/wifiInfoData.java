@@ -10,11 +10,11 @@ public class WifiInfoData {
 	// singletone var
 	private static WifiInfoData instance = null;
 	
-	private ArrayList<DiaryData> wifiInfoList;
+	private ArrayList<WifiDataItem> wifiInfoList;
 	
 	private WifiInfoData()
 	{
-		wifiInfoList = new ArrayList<DiaryData>();
+		wifiInfoList = new ArrayList<WifiDataItem>();
 	}
 	
 	public static WifiInfoData getInstance()
@@ -23,11 +23,11 @@ public class WifiInfoData {
 			instance = new WifiInfoData();
 		return instance;
 	}
-	public ArrayList<DiaryData> getWifiInfoData()
+	public ArrayList<WifiDataItem> getWifiInfoData()
 	{
 		return wifiInfoList;
 	}
-	public DiaryData getWifiInfoData(int i)
+	public WifiDataItem getWifiInfoData(int i)
 	{
 		return wifiInfoList.get(i);
 	}
@@ -35,7 +35,7 @@ public class WifiInfoData {
 	{
 		wifiInfoList.clear();
 		for(int i=0 ; i<result.size() ; i++)
-			wifiInfoList.add(new DiaryData(result.get(i), (result.get(i).SSID.equals(connectedSSID)) && (result.get(i).BSSID.equals(connectedBSSID))));
+			wifiInfoList.add(new WifiDataItem(result.get(i), (result.get(i).SSID.equals(connectedSSID)) && (result.get(i).BSSID.equals(connectedBSSID))));
 	}
 	public int getSize()
 	{

@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     
     private boolean isPuased = false;
     //protected ListFragment mFrags
-    private Handler fromServiceHandler = new Handler() {	//	activity에서 보낸 메세지 처리 handler포함하는 messenger
+    private Handler fromServiceHandler = new Handler() {	//	service에서 보낸 메세지 처리 handler포함하는 messenger
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);

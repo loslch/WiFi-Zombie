@@ -2,7 +2,7 @@ package com.data;
 
 import android.net.wifi.ScanResult;
 
-public class DiaryData {
+public class WifiDataItem {
 	private ScanResult APInfo;
 	private int channel=0;
 	private int isSecured;
@@ -14,7 +14,7 @@ public class DiaryData {
     public static final String EAP = "EAP";
 	private final String[] securityModes = { WEP, PSK, EAP };
 	
-	public DiaryData(ScanResult ap, boolean isCon)
+	public WifiDataItem(ScanResult ap, boolean isCon)
 	{
 		APInfo = ap;
 		channel = calcChannel();
