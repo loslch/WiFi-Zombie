@@ -11,6 +11,8 @@
 # Eclipse project files
 .classpath
 .project
+.properties
+.prefs
 
 # generated files
 bin/
@@ -27,4 +29,3 @@ proguard/
 *.ipr
 *.iws
 .idea/
-/submodule/google-play-services_lib/.settings/*.prefs
