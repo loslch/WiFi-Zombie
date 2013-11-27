@@ -1,4 +1,4 @@
-package com.fragments;
+ package com.fragments;
 
 import com.wifi_zombie.R;
 import com.wifi_zombie.R.array;

@@ -1,5 +1,5 @@
 package com.fragments;
 
-public class RatingChannelFragment {
+public class RatingChannelFragment extends MyFragment {
 
 }

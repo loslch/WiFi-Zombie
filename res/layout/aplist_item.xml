@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/aplist_item_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5pt"
+            android:text="Network name"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+		<TextView
+            android:id="@+id/aplist_item_bandwidth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2pt"
+            android:text="Bandwidth" />
+        <ImageView
+            android:id="@+id/aplist_item_issecured"
+            android:layout_width="10pt"
+            android:layout_height="10pt"
+            android:src="@drawable/security" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt" >
+
+        <TextView
+            android:id="@+id/aplist_item_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="channel"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/aplist_item_frequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="frequency"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ProgressBar
+            android:id="@+id/aplist_item_strength"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:max="100" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/aplist_item_security"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:text="security"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</LinearLayout>

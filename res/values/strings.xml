@@ -21,4 +21,5 @@
         <item>Indoor Survey</item>
         <item>Outdoor Survey</item>
     </string-array>
+    <string name="msgCode">msgCode</string>
 </resources>

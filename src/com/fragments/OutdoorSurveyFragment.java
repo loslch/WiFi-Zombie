@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.wifi_zombie.R;
 
-public class OutdoorFragment extends Fragment {
+public class OutdoorSurveyFragment extends MyFragment {
 	private GoogleMap mMap;
 
 	@Override

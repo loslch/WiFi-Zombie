@@ -1,5 +1,5 @@
 package com.fragments;
 
-public class IndoorSurveyFragment {
+public class IndoorSurveyFragment extends MyFragment {
 
 }
