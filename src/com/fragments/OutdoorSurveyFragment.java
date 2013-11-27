@@ -26,14 +26,20 @@ public class OutdoorSurveyFragment extends MyFragment {
 
 		setUpMapIfNeeded();
 	}
+	
+	@Override
+	public void onResume() {
+	    super.onResume();
+	}
 
 	@Override
 	public void onDestroyView() {
 	    super.onDestroyView();
 
 	    Fragment f = getFragmentManager().findFragmentById(R.id.map);
-	    if (f != null) 
+	    if (f != null) {
 	        getFragmentManager().beginTransaction().remove(f).commit();
+	    }
 	}
 
 	private void setUpMapIfNeeded() {
