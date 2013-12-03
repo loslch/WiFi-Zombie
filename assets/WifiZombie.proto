@@ -3,21 +3,16 @@ package wifi_zombie;
 option java_package = "com.wifi_zombie";
 option java_outer_classname = "WifiZombieProto";
 
-enum SecurityType {   // 보안 방법
-  NONE = 0;
-  PSK = 1;
-  WEP = 2;
-  EAP = 3;
-  WPA = 4;
-  WPA2 = 5;
-}
-
-enum SurveyType {     // 서베이 타입
-  INDOOR = 0;
-  OUTDOOR = 1;
-}
-
 message WifiInfo {    // WifiInfoData 클래스가 만드는 와이파이 정보
+
+  enum SecurityType {   // 보안 방법
+    NONE = 0;
+    PSK = 1;
+    WEP = 2;
+    EAP = 3;
+    WPA = 4;
+    WPA2 = 5;
+  }
 
   message WifiData {    // 와이파이 정보의 단위
     required string ssid = 1;         // AP Name
@@ -34,6 +29,11 @@ message WifiInfo {    // WifiInfoData 클래스가 만드는 와이파이 정보
 }
 
 message WifiSurvey {   // 파일로 저장되는 와이파이 정보
+
+  enum SurveyType {     // 서베이 타입
+    INDOOR = 0;
+    OUTDOOR = 1;
+  }
 
   required string title = 1;              // 서베이 제목
   optional string creator = 2;            // 제작자 이름

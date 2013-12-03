@@ -1,10 +1,10 @@
 package com.fragments;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.data.WifiDataItem;
+import com.data.WifiInfoData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
@@ -25,6 +26,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.wifi_zombie.R;
+import com.wifi_zombie.WifiZombieProto.WifiInfo;
+import com.wifi_zombie.WifiZombieProto.WifiSurvey;
+import com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType;
+import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem;
+import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem.Position;
 
 public class OutdoorSurveyFragment extends MyFragment implements LocationListener, LocationSource, OnClickListener {
 	private GoogleMap mMap = null;
@@ -35,6 +41,8 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     private View inflater;
     private Button btnSaveCurrentAPs; 
     private Context context;
+    
+    private List<WifiItem> lstWifiItem;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +55,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		super.onActivityCreated(savedInstanceState);
 		
 		context = getActivity().getApplicationContext();
+		
 		btnSaveCurrentAPs = (Button) inflater.findViewById(R.id.btnSaveCurrentAPs);
 		btnSaveCurrentAPs.setOnClickListener(this);
 
@@ -75,6 +84,8 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         {
             //Show some generic error dialog because something must have gone wrong with location manager.
         }
+        
+        lstWifiItem = new ArrayList<WifiItem>();
         
 		setUpMapIfNeeded();
 	}
@@ -115,31 +126,8 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.btnSaveCurrentAPs:
-			WifiDataItem item = null;
-			for(int i=0 ; i<super.wifidata.getSize() ; i++)
-			{
-				if(super.wifidata.getWifiInfoData(i).isConnected())
-					item = super.wifidata.getWifiInfoData(i);
-			}
-			String result = "";
-			if(item != null)
-			{
-				result += item.getSSID();
-				result += "\nBSSID : ";
-				result += item.getBSSID();
-				result += "\nStrength : ";
-				result += item.getStrength();
-				result += "\nSecurity Mode : ";
-				result += item.getSecurityMode();
-				result += "\nFrequency : ";
-				result += item.getFrequency()+"Mhz";
-				result += "\nBandwidth : ";
-				result += item.getBandWidth()+"G";
-			}
-			else
-				result += "\nConnected nothing";
-    		Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-    		
+			storeCurrentWifiItem();
+    		Toast.makeText(context, "저장", Toast.LENGTH_SHORT).show();
 			break;
 
 		default:
@@ -147,10 +135,39 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		}		
 	}
 	
-	@Override
-	public void updateWifiData() {
-		super.updateWifiData();
+	private void storeCurrentWifiItem() {
+		WifiItem currentWifiItem = getWifiItem();
+		lstWifiItem.add(currentWifiItem);
+	}
+	
+	private WifiItem getWifiItem() {
+		/* Wifi Info를 가져와서 위치 정보를 가진 Wifi Item으로 만든다 */
+		WifiInfoData wifiInfoData = super.wifidata;
+		WifiInfo wifiInfo = wifiInfoData.getWifiInfo();
+		double[] currentPosition = getlocation();
+		WifiItem wifiItem = WifiItem.newBuilder()
+				.setPosition(Position.newBuilder()
+						.setX(currentPosition[0])
+						.setY(currentPosition[1])
+						.build())
+				.setWifiInfo(wifiInfo)
+				.build();
 		
+		return wifiItem;
+	}
+	
+	private WifiSurvey generateWifiSurvey() {
+		/* 다수의 Wifi Item과 Survey정보를 가진 Wifi Survey 생성 */
+		WifiSurvey.Builder wifiSurveyBuilder = WifiSurvey.newBuilder();
+		wifiSurveyBuilder.setTitle("title")
+			.setCreatedTime(0)
+			.setCreator("creator")
+			.setSurveyType(SurveyType.OUTDOOR);
+		for (WifiItem item : lstWifiItem) {
+			wifiSurveyBuilder.addWifiItemList(item);
+		}
+		
+		return wifiSurveyBuilder.build();
 	}
 
 	private void setUpMapIfNeeded() {

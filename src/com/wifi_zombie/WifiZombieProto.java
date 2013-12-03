@@ -8,214 +8,6 @@ public final class WifiZombieProto {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  /**
-   * Protobuf enum {@code wifi_zombie.SecurityType}
-   *
-   * <pre>
-   * 보안 방법
-   * </pre>
-   */
-  public enum SecurityType
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>NONE = 0;</code>
-     */
-    NONE(0, 0),
-    /**
-     * <code>PSK = 1;</code>
-     */
-    PSK(1, 1),
-    /**
-     * <code>WEP = 2;</code>
-     */
-    WEP(2, 2),
-    /**
-     * <code>EAP = 3;</code>
-     */
-    EAP(3, 3),
-    /**
-     * <code>WPA = 4;</code>
-     */
-    WPA(4, 4),
-    /**
-     * <code>WPA2 = 5;</code>
-     */
-    WPA2(5, 5),
-    ;
-
-    /**
-     * <code>NONE = 0;</code>
-     */
-    public static final int NONE_VALUE = 0;
-    /**
-     * <code>PSK = 1;</code>
-     */
-    public static final int PSK_VALUE = 1;
-    /**
-     * <code>WEP = 2;</code>
-     */
-    public static final int WEP_VALUE = 2;
-    /**
-     * <code>EAP = 3;</code>
-     */
-    public static final int EAP_VALUE = 3;
-    /**
-     * <code>WPA = 4;</code>
-     */
-    public static final int WPA_VALUE = 4;
-    /**
-     * <code>WPA2 = 5;</code>
-     */
-    public static final int WPA2_VALUE = 5;
-
-
-    public final int getNumber() { return value; }
-
-    public static SecurityType valueOf(int value) {
-      switch (value) {
-        case 0: return NONE;
-        case 1: return PSK;
-        case 2: return WEP;
-        case 3: return EAP;
-        case 4: return WPA;
-        case 5: return WPA2;
-        default: return null;
-      }
-    }
-
-    public static com.google.protobuf.Internal.EnumLiteMap<SecurityType>
-        internalGetValueMap() {
-      return internalValueMap;
-    }
-    private static com.google.protobuf.Internal.EnumLiteMap<SecurityType>
-        internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<SecurityType>() {
-            public SecurityType findValueByNumber(int number) {
-              return SecurityType.valueOf(number);
-            }
-          };
-
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-      return getDescriptor().getValues().get(index);
-    }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-      return getDescriptor();
-    }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-      return com.wifi_zombie.WifiZombieProto.getDescriptor().getEnumTypes().get(0);
-    }
-
-    private static final SecurityType[] VALUES = values();
-
-    public static SecurityType valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-      if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
-      }
-      return VALUES[desc.getIndex()];
-    }
-
-    private final int index;
-    private final int value;
-
-    private SecurityType(int index, int value) {
-      this.index = index;
-      this.value = value;
-    }
-
-    // @@protoc_insertion_point(enum_scope:wifi_zombie.SecurityType)
-  }
-
-  /**
-   * Protobuf enum {@code wifi_zombie.SurveyType}
-   *
-   * <pre>
-   * 서베이 타입
-   * </pre>
-   */
-  public enum SurveyType
-      implements com.google.protobuf.ProtocolMessageEnum {
-    /**
-     * <code>INDOOR = 0;</code>
-     */
-    INDOOR(0, 0),
-    /**
-     * <code>OUTDOOR = 1;</code>
-     */
-    OUTDOOR(1, 1),
-    ;
-
-    /**
-     * <code>INDOOR = 0;</code>
-     */
-    public static final int INDOOR_VALUE = 0;
-    /**
-     * <code>OUTDOOR = 1;</code>
-     */
-    public static final int OUTDOOR_VALUE = 1;
-
-
-    public final int getNumber() { return value; }
-
-    public static SurveyType valueOf(int value) {
-      switch (value) {
-        case 0: return INDOOR;
-        case 1: return OUTDOOR;
-        default: return null;
-      }
-    }
-
-    public static com.google.protobuf.Internal.EnumLiteMap<SurveyType>
-        internalGetValueMap() {
-      return internalValueMap;
-    }
-    private static com.google.protobuf.Internal.EnumLiteMap<SurveyType>
-        internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<SurveyType>() {
-            public SurveyType findValueByNumber(int number) {
-              return SurveyType.valueOf(number);
-            }
-          };
-
-    public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
-      return getDescriptor().getValues().get(index);
-    }
-    public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
-      return getDescriptor();
-    }
-    public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-      return com.wifi_zombie.WifiZombieProto.getDescriptor().getEnumTypes().get(1);
-    }
-
-    private static final SurveyType[] VALUES = values();
-
-    public static SurveyType valueOf(
-        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-      if (desc.getType() != getDescriptor()) {
-        throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
-      }
-      return VALUES[desc.getIndex()];
-    }
-
-    private final int index;
-    private final int value;
-
-    private SurveyType(int index, int value) {
-      this.index = index;
-      this.value = value;
-    }
-
-    // @@protoc_insertion_point(enum_scope:wifi_zombie.SurveyType)
-  }
-
   public interface WifiInfoOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -369,6 +161,128 @@ public final class WifiZombieProto {
       return PARSER;
     }
 
+    /**
+     * Protobuf enum {@code wifi_zombie.WifiInfo.SecurityType}
+     *
+     * <pre>
+     * 보안 방법
+     * </pre>
+     */
+    public enum SecurityType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>NONE = 0;</code>
+       */
+      NONE(0, 0),
+      /**
+       * <code>PSK = 1;</code>
+       */
+      PSK(1, 1),
+      /**
+       * <code>WEP = 2;</code>
+       */
+      WEP(2, 2),
+      /**
+       * <code>EAP = 3;</code>
+       */
+      EAP(3, 3),
+      /**
+       * <code>WPA = 4;</code>
+       */
+      WPA(4, 4),
+      /**
+       * <code>WPA2 = 5;</code>
+       */
+      WPA2(5, 5),
+      ;
+
+      /**
+       * <code>NONE = 0;</code>
+       */
+      public static final int NONE_VALUE = 0;
+      /**
+       * <code>PSK = 1;</code>
+       */
+      public static final int PSK_VALUE = 1;
+      /**
+       * <code>WEP = 2;</code>
+       */
+      public static final int WEP_VALUE = 2;
+      /**
+       * <code>EAP = 3;</code>
+       */
+      public static final int EAP_VALUE = 3;
+      /**
+       * <code>WPA = 4;</code>
+       */
+      public static final int WPA_VALUE = 4;
+      /**
+       * <code>WPA2 = 5;</code>
+       */
+      public static final int WPA2_VALUE = 5;
+
+
+      public final int getNumber() { return value; }
+
+      public static SecurityType valueOf(int value) {
+        switch (value) {
+          case 0: return NONE;
+          case 1: return PSK;
+          case 2: return WEP;
+          case 3: return EAP;
+          case 4: return WPA;
+          case 5: return WPA2;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<SecurityType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<SecurityType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<SecurityType>() {
+              public SecurityType findValueByNumber(int number) {
+                return SecurityType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.wifi_zombie.WifiZombieProto.WifiInfo.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final SecurityType[] VALUES = values();
+
+      public static SecurityType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private SecurityType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:wifi_zombie.WifiInfo.SecurityType)
+    }
+
     public interface WifiDataOrBuilder
         extends com.google.protobuf.MessageOrBuilder {
 
@@ -480,9 +394,9 @@ public final class WifiZombieProto {
        */
       float getBandwidth();
 
-      // required .wifi_zombie.SecurityType security = 6 [default = NONE];
+      // required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];
       /**
-       * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+       * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
        *
        * <pre>
        * 보안 방법
@@ -490,13 +404,13 @@ public final class WifiZombieProto {
        */
       boolean hasSecurity();
       /**
-       * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+       * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
        *
        * <pre>
        * 보안 방법
        * </pre>
        */
-      com.wifi_zombie.WifiZombieProto.SecurityType getSecurity();
+      com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType getSecurity();
     }
     /**
      * Protobuf type {@code wifi_zombie.WifiInfo.WifiData}
@@ -580,7 +494,7 @@ public final class WifiZombieProto {
               }
               case 48: {
                 int rawValue = input.readEnum();
-                com.wifi_zombie.WifiZombieProto.SecurityType value = com.wifi_zombie.WifiZombieProto.SecurityType.valueOf(rawValue);
+                com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType value = com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType.valueOf(rawValue);
                 if (value == null) {
                   unknownFields.mergeVarintField(6, rawValue);
                 } else {
@@ -811,11 +725,11 @@ public final class WifiZombieProto {
         return bandwidth_;
       }
 
-      // required .wifi_zombie.SecurityType security = 6 [default = NONE];
+      // required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];
       public static final int SECURITY_FIELD_NUMBER = 6;
-      private com.wifi_zombie.WifiZombieProto.SecurityType security_;
+      private com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType security_;
       /**
-       * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+       * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
        *
        * <pre>
        * 보안 방법
@@ -825,13 +739,13 @@ public final class WifiZombieProto {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+       * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
        *
        * <pre>
        * 보안 방법
        * </pre>
        */
-      public com.wifi_zombie.WifiZombieProto.SecurityType getSecurity() {
+      public com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType getSecurity() {
         return security_;
       }
 
@@ -841,7 +755,7 @@ public final class WifiZombieProto {
         strength_ = 0;
         channel_ = 0;
         bandwidth_ = 0F;
-        security_ = com.wifi_zombie.WifiZombieProto.SecurityType.NONE;
+        security_ = com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType.NONE;
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -1060,7 +974,7 @@ public final class WifiZombieProto {
           bitField0_ = (bitField0_ & ~0x00000008);
           bandwidth_ = 0F;
           bitField0_ = (bitField0_ & ~0x00000010);
-          security_ = com.wifi_zombie.WifiZombieProto.SecurityType.NONE;
+          security_ = com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType.NONE;
           bitField0_ = (bitField0_ & ~0x00000020);
           return this;
         }
@@ -1546,10 +1460,10 @@ public final class WifiZombieProto {
           return this;
         }
 
-        // required .wifi_zombie.SecurityType security = 6 [default = NONE];
-        private com.wifi_zombie.WifiZombieProto.SecurityType security_ = com.wifi_zombie.WifiZombieProto.SecurityType.NONE;
+        // required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];
+        private com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType security_ = com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType.NONE;
         /**
-         * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+         * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
          *
          * <pre>
          * 보안 방법
@@ -1559,23 +1473,23 @@ public final class WifiZombieProto {
           return ((bitField0_ & 0x00000020) == 0x00000020);
         }
         /**
-         * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+         * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
          *
          * <pre>
          * 보안 방법
          * </pre>
          */
-        public com.wifi_zombie.WifiZombieProto.SecurityType getSecurity() {
+        public com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType getSecurity() {
           return security_;
         }
         /**
-         * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+         * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
          *
          * <pre>
          * 보안 방법
          * </pre>
          */
-        public Builder setSecurity(com.wifi_zombie.WifiZombieProto.SecurityType value) {
+        public Builder setSecurity(com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType value) {
           if (value == null) {
             throw new NullPointerException();
           }
@@ -1585,7 +1499,7 @@ public final class WifiZombieProto {
           return this;
         }
         /**
-         * <code>required .wifi_zombie.SecurityType security = 6 [default = NONE];</code>
+         * <code>required .wifi_zombie.WifiInfo.SecurityType security = 6 [default = NONE];</code>
          *
          * <pre>
          * 보안 방법
@@ -1593,7 +1507,7 @@ public final class WifiZombieProto {
          */
         public Builder clearSecurity() {
           bitField0_ = (bitField0_ & ~0x00000020);
-          security_ = com.wifi_zombie.WifiZombieProto.SecurityType.NONE;
+          security_ = com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType.NONE;
           onChanged();
           return this;
         }
@@ -2337,9 +2251,9 @@ public final class WifiZombieProto {
      */
     long getCreatedTime();
 
-    // required .wifi_zombie.SurveyType survey_type = 4;
+    // required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;
     /**
-     * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+     * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
      *
      * <pre>
      * 서베이 타입
@@ -2347,13 +2261,13 @@ public final class WifiZombieProto {
      */
     boolean hasSurveyType();
     /**
-     * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+     * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
      *
      * <pre>
      * 서베이 타입
      * </pre>
      */
-    com.wifi_zombie.WifiZombieProto.SurveyType getSurveyType();
+    com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType getSurveyType();
 
     // optional string image_path = 5;
     /**
@@ -2499,7 +2413,7 @@ public final class WifiZombieProto {
             }
             case 32: {
               int rawValue = input.readEnum();
-              com.wifi_zombie.WifiZombieProto.SurveyType value = com.wifi_zombie.WifiZombieProto.SurveyType.valueOf(rawValue);
+              com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType value = com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(4, rawValue);
               } else {
@@ -2561,6 +2475,92 @@ public final class WifiZombieProto {
     @java.lang.Override
     public com.google.protobuf.Parser<WifiSurvey> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code wifi_zombie.WifiSurvey.SurveyType}
+     *
+     * <pre>
+     * 서베이 타입
+     * </pre>
+     */
+    public enum SurveyType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>INDOOR = 0;</code>
+       */
+      INDOOR(0, 0),
+      /**
+       * <code>OUTDOOR = 1;</code>
+       */
+      OUTDOOR(1, 1),
+      ;
+
+      /**
+       * <code>INDOOR = 0;</code>
+       */
+      public static final int INDOOR_VALUE = 0;
+      /**
+       * <code>OUTDOOR = 1;</code>
+       */
+      public static final int OUTDOOR_VALUE = 1;
+
+
+      public final int getNumber() { return value; }
+
+      public static SurveyType valueOf(int value) {
+        switch (value) {
+          case 0: return INDOOR;
+          case 1: return OUTDOOR;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<SurveyType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<SurveyType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<SurveyType>() {
+              public SurveyType findValueByNumber(int number) {
+                return SurveyType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.wifi_zombie.WifiZombieProto.WifiSurvey.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final SurveyType[] VALUES = values();
+
+      public static SurveyType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private SurveyType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:wifi_zombie.WifiSurvey.SurveyType)
     }
 
     public interface WifiItemOrBuilder
@@ -4114,11 +4114,11 @@ public final class WifiZombieProto {
       return createdTime_;
     }
 
-    // required .wifi_zombie.SurveyType survey_type = 4;
+    // required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;
     public static final int SURVEY_TYPE_FIELD_NUMBER = 4;
-    private com.wifi_zombie.WifiZombieProto.SurveyType surveyType_;
+    private com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType surveyType_;
     /**
-     * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+     * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
      *
      * <pre>
      * 서베이 타입
@@ -4128,13 +4128,13 @@ public final class WifiZombieProto {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+     * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
      *
      * <pre>
      * 서베이 타입
      * </pre>
      */
-    public com.wifi_zombie.WifiZombieProto.SurveyType getSurveyType() {
+    public com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType getSurveyType() {
       return surveyType_;
     }
 
@@ -4253,7 +4253,7 @@ public final class WifiZombieProto {
       title_ = "";
       creator_ = "";
       createdTime_ = 0L;
-      surveyType_ = com.wifi_zombie.WifiZombieProto.SurveyType.INDOOR;
+      surveyType_ = com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType.INDOOR;
       imagePath_ = "";
       wifiItemList_ = java.util.Collections.emptyList();
     }
@@ -4461,7 +4461,7 @@ public final class WifiZombieProto {
         bitField0_ = (bitField0_ & ~0x00000002);
         createdTime_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
-        surveyType_ = com.wifi_zombie.WifiZombieProto.SurveyType.INDOOR;
+        surveyType_ = com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType.INDOOR;
         bitField0_ = (bitField0_ & ~0x00000008);
         imagePath_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -4877,10 +4877,10 @@ public final class WifiZombieProto {
         return this;
       }
 
-      // required .wifi_zombie.SurveyType survey_type = 4;
-      private com.wifi_zombie.WifiZombieProto.SurveyType surveyType_ = com.wifi_zombie.WifiZombieProto.SurveyType.INDOOR;
+      // required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;
+      private com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType surveyType_ = com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType.INDOOR;
       /**
-       * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+       * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
        *
        * <pre>
        * 서베이 타입
@@ -4890,23 +4890,23 @@ public final class WifiZombieProto {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+       * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
        *
        * <pre>
        * 서베이 타입
        * </pre>
        */
-      public com.wifi_zombie.WifiZombieProto.SurveyType getSurveyType() {
+      public com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType getSurveyType() {
         return surveyType_;
       }
       /**
-       * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+       * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
        *
        * <pre>
        * 서베이 타입
        * </pre>
        */
-      public Builder setSurveyType(com.wifi_zombie.WifiZombieProto.SurveyType value) {
+      public Builder setSurveyType(com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4916,7 +4916,7 @@ public final class WifiZombieProto {
         return this;
       }
       /**
-       * <code>required .wifi_zombie.SurveyType survey_type = 4;</code>
+       * <code>required .wifi_zombie.WifiSurvey.SurveyType survey_type = 4;</code>
        *
        * <pre>
        * 서베이 타입
@@ -4924,7 +4924,7 @@ public final class WifiZombieProto {
        */
       public Builder clearSurveyType() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        surveyType_ = com.wifi_zombie.WifiZombieProto.SurveyType.INDOOR;
+        surveyType_ = com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType.INDOOR;
         onChanged();
         return this;
       }
@@ -5384,25 +5384,25 @@ public final class WifiZombieProto {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020WifiZombie.proto\022\013wifi_zombie\"\320\001\n\010Wifi" +
+      "\n\020WifiZombie.proto\022\013wifi_zombie\"\241\002\n\010Wifi" +
       "Info\0221\n\twifi_data\030\001 \003(\0132\036.wifi_zombie.Wi" +
-      "fiInfo.WifiData\032\220\001\n\010WifiData\022\014\n\004ssid\030\001 \002" +
+      "fiInfo.WifiData\032\231\001\n\010WifiData\022\014\n\004ssid\030\001 \002" +
       "(\t\022\r\n\005bssid\030\002 \002(\t\022\020\n\010strength\030\003 \002(\005\022\017\n\007c" +
-      "hannel\030\004 \002(\005\022\021\n\tbandwidth\030\005 \002(\002\0221\n\010secur" +
-      "ity\030\006 \002(\0162\031.wifi_zombie.SecurityType:\004NO" +
-      "NE\"\324\002\n\nWifiSurvey\022\r\n\005title\030\001 \002(\t\022\017\n\007crea" +
-      "tor\030\002 \001(\t\022\024\n\014created_time\030\003 \001(\003\022,\n\013surve" +
-      "y_type\030\004 \002(\0162\027.wifi_zombie.SurveyType\022\022\n" +
-      "\nimage_path\030\005 \001(\t\0228\n\016wifi_item_list\030\006 \003(",
-      "\0132 .wifi_zombie.WifiSurvey.WifiItem\032\223\001\n\010" +
-      "WifiItem\022;\n\010position\030\001 \002(\0132).wifi_zombie" +
-      ".WifiSurvey.WifiItem.Position\022(\n\twifi_in" +
-      "fo\030\002 \002(\0132\025.wifi_zombie.WifiInfo\032 \n\010Posit" +
-      "ion\022\t\n\001x\030\001 \002(\001\022\t\n\001y\030\002 \002(\001*F\n\014SecurityTyp" +
-      "e\022\010\n\004NONE\020\000\022\007\n\003PSK\020\001\022\007\n\003WEP\020\002\022\007\n\003EAP\020\003\022\007" +
-      "\n\003WPA\020\004\022\010\n\004WPA2\020\005*%\n\nSurveyType\022\n\n\006INDOO" +
-      "R\020\000\022\013\n\007OUTDOOR\020\001B\"\n\017com.wifi_zombieB\017Wif" +
-      "iZombieProto"
+      "hannel\030\004 \002(\005\022\021\n\tbandwidth\030\005 \002(\002\022:\n\010secur" +
+      "ity\030\006 \002(\0162\".wifi_zombie.WifiInfo.Securit" +
+      "yType:\004NONE\"F\n\014SecurityType\022\010\n\004NONE\020\000\022\007\n" +
+      "\003PSK\020\001\022\007\n\003WEP\020\002\022\007\n\003EAP\020\003\022\007\n\003WPA\020\004\022\010\n\004WPA" +
+      "2\020\005\"\206\003\n\nWifiSurvey\022\r\n\005title\030\001 \002(\t\022\017\n\007cre" +
+      "ator\030\002 \001(\t\022\024\n\014created_time\030\003 \001(\003\0227\n\013surv",
+      "ey_type\030\004 \002(\0162\".wifi_zombie.WifiSurvey.S" +
+      "urveyType\022\022\n\nimage_path\030\005 \001(\t\0228\n\016wifi_it" +
+      "em_list\030\006 \003(\0132 .wifi_zombie.WifiSurvey.W" +
+      "ifiItem\032\223\001\n\010WifiItem\022;\n\010position\030\001 \002(\0132)" +
+      ".wifi_zombie.WifiSurvey.WifiItem.Positio" +
+      "n\022(\n\twifi_info\030\002 \002(\0132\025.wifi_zombie.WifiI" +
+      "nfo\032 \n\010Position\022\t\n\001x\030\001 \002(\001\022\t\n\001y\030\002 \002(\001\"%\n" +
+      "\nSurveyType\022\n\n\006INDOOR\020\000\022\013\n\007OUTDOOR\020\001B\"\n\017" +
+      "com.wifi_zombieB\017WifiZombieProto"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
