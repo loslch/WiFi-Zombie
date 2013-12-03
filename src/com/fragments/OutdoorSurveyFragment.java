@@ -125,9 +125,9 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 			if(item != null)
 			{
 				result += item.getSSID();
-				result += "\nSSID : ";
+				result += "\nBSSID : ";
 				result += item.getBSSID();
-				result += "\nMAC Addr : ";
+				result += "\nStrength : ";
 				result += item.getStrength();
 				result += "\nSecurity Mode : ";
 				result += item.getSecurityMode();
