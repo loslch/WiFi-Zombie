@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 import com.wifi_zombie.R;
 import com.wifi_zombie.WifiZombieProto.WifiInfo;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey;
@@ -215,13 +216,14 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		Share.lat = currentWifiItem.getPosition().getX();
 		Share.lng = currentWifiItem.getPosition().getY();
 
-//		TextIconGenerator tc = new TextIconGenerator(this);
-//		Bitmap bmp = tc.makeIcon(String.valueOf(lstWifiItem.size()));
+		// Bubble Icon 생성
+		IconGenerator mIconGenerator = new IconGenerator(context);
+		mIconGenerator.setStyle(mIconGenerator.STYLE_RED);
+		Bitmap iconBitmap = mIconGenerator.makeIcon(String.valueOf(lstWifiItem.size()));
 		
 		mMap.addMarker(new MarkerOptions()
-//		.icon(BitmapDescriptorFactory.fromBitmap(bmp))
-		.position(new LatLng(Share.lat, Share.lng))
-		.title(String.valueOf(lstWifiItem.size())));
+		.icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
+		.position(new LatLng(Share.lat, Share.lng)));
 	}
 	
 	private WifiItem getWifiItem() {
