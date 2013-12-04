@@ -1,9 +1,11 @@
-package com.wifi_zombie;
+package source;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.data.WifiDataItem;
+import com.wifi_zombie.R;
+import com.wifi_zombie.R.id;
 
 
 import android.content.Context;
@@ -15,14 +17,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class CustomAdapter extends ArrayAdapter<WifiDataItem>{
+public class APListAdapter extends ArrayAdapter<WifiDataItem>{
 	private final int maxProgress = 100;
 	private Context mContext;
     private int mResource;
     private ArrayList<WifiDataItem> mList;
     private LayoutInflater mInflater;
     
-	public CustomAdapter(Context context, int textViewResourceId, ArrayList<WifiDataItem> objects) {
+	public APListAdapter(Context context, int textViewResourceId, ArrayList<WifiDataItem> objects) {
 		super(context, textViewResourceId, objects);
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
