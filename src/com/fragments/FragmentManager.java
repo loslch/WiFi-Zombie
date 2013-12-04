@@ -1,4 +1,4 @@
-package com.wifi_zombie;
+package com.fragments;
 
 import com.fragments.*;
 
@@ -32,7 +32,7 @@ public class FragmentManager {
 		Dashboard = new DashboardFragment();
 		AccessPointList = new AccessPointListFragment();
 		ChannelGraph = new ChannelGraphFragment();
-		RatingChannel = new DashboardFragment();
+		RatingChannel = new RatingChannelFragment();
 		IndoorSurvey = new IndoorSurveyFragment();
 		OutdoorSurvey = new OutdoorSurveyFragment();
 		Settings = new DashboardFragment();

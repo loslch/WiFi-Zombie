@@ -3,6 +3,9 @@ package com.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import source.APListAdapter;
+import source.MyFragment;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,7 +18,6 @@ import android.widget.TextView;
 
 import com.data.WifiDataItem;
 import com.data.WifiInfoData;
-import com.wifi_zombie.CustomAdapter;
 import com.wifi_zombie.R;
 
 public class AccessPointListFragment extends MyFragment{
@@ -40,7 +42,7 @@ public class AccessPointListFragment extends MyFragment{
 //		ArrayList<WifiDataItem> list = new ArrayList<WifiDataItem>();
 //		for (int i = 0; i < wifidata.getSize(); i++)
 //			list.add(super.wifidata.getWifiInfoData(i));
-		CustomAdapter adapter = new CustomAdapter(getActivity(), R.layout.aplist_item, super.wifidata.getWifiInfoData());
+		APListAdapter adapter = new APListAdapter(getActivity(), R.layout.aplist_item, super.wifidata.getWifiInfoData());
 		aplist.setAdapter(adapter);
 		aplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

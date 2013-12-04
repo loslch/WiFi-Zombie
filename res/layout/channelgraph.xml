@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/channelgraph_btn1"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="20pt"
-        android:layout_height="wrap_content"
-        android:text="2.4G" />
-
-    <com.wifi_zombie.GraphCanvasView
-        android:id="@+id/channelgraph_canvas"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/channelgraph_btn1"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="20pt"
+            android:layout_height="wrap_content"
+            android:text="2.4G" />
+
+        <SeekBar
+            android:id="@+id/channelgraph_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10pt"
+            android:layout_marginRight="10pt"
+            android:layout_weight="1"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/channelgraph_graphlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <source.GraphCanvasView2_4G
+            android:id="@+id/channelgraph_canvas"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+              />
+
+
+            <source.GraphCanvasView5G
+                android:id="@+id/channelgraph_canvas5G"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+
+
+            <source.GraphCanvasView5G_Axis
+                android:id="@+id/channelgraph_canvas5G_axis"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
+
+
+    </RelativeLayout>
 
 </LinearLayout>

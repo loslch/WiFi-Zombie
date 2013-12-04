@@ -1,5 +1,7 @@
 package com.fragments;
 
+import source.MyFragment;
+
 import com.data.WifiDataItem;
 import com.wifi_zombie.R;
 

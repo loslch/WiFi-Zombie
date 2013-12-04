@@ -1,7 +1,9 @@
 package com.wifi_zombie;
 
+import source.MyFragment;
+
 import com.data.WifiInfoData;
-import com.fragments.MyFragment;
+import com.fragments.FragmentManager;
 import com.fragments.SlideMenuFragment.OnArticleSelectedListener;
 
 import android.content.ComponentName;
@@ -93,18 +95,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// service에서 wifi 정보 업데이트 여부를 받아오는 리스너 등록
 		Intent lIntent = new Intent(MainActivity.this, WifiService.class);
 		startService(lIntent);
-		bindService(new Intent(MainActivity.this, WifiService.class), mConnection, Context.BIND_AUTO_CREATE);
-		
-		// service start
-//		Intent lIntent = new Intent(MainActivity.this, WifiService.class);
-//		lIntent.putExtra("Messenger", mActivityMessenger);
-//		startService(lIntent);
-//		try {          
-//			 wifiService.send(Message.obtain(null, AbstractService.MSG_REGISTER_CLIENT, 0, 0));
-//	        } 
-//	        catch (RemoteException e) {
-//	        	Log.i("wifi zombie", "아놔ㅡㅡ");
-//	        }
+
 		
 		mainT = this.getSupportFragmentManager().beginTransaction();
 		mainT.replace(R.id.activity_main, fmanager.getFragmentByMenu("Dashboard"));
@@ -146,6 +137,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onResume() {
 //    	Log.i("wifi zombie", "onResume");
     	isPuased = false;
+    	bindService(new Intent(MainActivity.this, WifiService.class), mConnection, Context.BIND_AUTO_CREATE);
         super.onResume();
     }
     @Override
@@ -158,7 +150,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onDestroy() {	// 어플 끝나면 unbind함
         super.onDestroy();
         try {
-            //wifiService.unbind();
+            wifiService.onDestroy();
+            
         } catch (Throwable t) {
             Log.e("MainActivity", "Failed to unbind from the service", t);
         }
