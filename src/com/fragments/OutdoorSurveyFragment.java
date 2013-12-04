@@ -3,6 +3,8 @@ package com.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import source.MyFragment;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
