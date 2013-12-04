@@ -23,11 +23,13 @@ import android.widget.Toast;
 import com.data.WifiInfoData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.wifi_zombie.R;
@@ -37,7 +39,7 @@ import com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem.Position;
 
-public class OutdoorSurveyFragment extends MyFragment implements LocationListener, LocationSource, OnClickListener {
+public class OutdoorSurveyFragment extends MyFragment implements LocationListener, LocationSource, OnClickListener, OnMarkerClickListener {
 	private GoogleMap mMap = null;
 	
     private OnLocationChangedListener mListener;
@@ -122,6 +124,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 					.findFragmentById(R.id.map)).getMap();
 			// Check if we were successful in obtaining the map.
 			if (mMap != null) {
+				mMap.setOnMarkerClickListener(this);
 		        mMap.setMyLocationEnabled(true);
 				moveToCurrentLocation();
 			}
@@ -207,6 +210,13 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 			break;
 		}		
 	}
+	
+	@Override
+	public boolean onMarkerClick(Marker marker) {
+		Toast.makeText(context, marker.getSnippet(), Toast.LENGTH_SHORT).show();
+		
+		return false;
+	}
 
 	private void storeCurrentWifiItem() {
 		WifiItem currentWifiItem = getWifiItem();
@@ -222,6 +232,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		Bitmap iconBitmap = mIconGenerator.makeIcon(String.valueOf(lstWifiItem.size()));
 		
 		mMap.addMarker(new MarkerOptions()
+		.snippet("#"+String.valueOf(lstWifiItem.size()))
 		.icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
 		.position(new LatLng(Share.lat, Share.lng)));
 	}
