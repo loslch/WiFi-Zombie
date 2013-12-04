@@ -1,7 +1,5 @@
 package com.wifi_zombie;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,10 +7,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.fragments.SlideMenuFragment;
@@ -83,4 +80,22 @@ public class BaseActivity extends SlidingFragmentActivity implements OnArticleSe
         .setNegativeButton("No", null)
         .show();
     }*/
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.action_menu_refresh:
+        	Toast.makeText(this, "Refresh was clicked", Toast.LENGTH_SHORT).show();
+        	break;
+        }
+        
+    	return true;
+    }
 }

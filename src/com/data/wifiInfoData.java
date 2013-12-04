@@ -3,8 +3,10 @@ package com.data;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import android.net.wifi.ScanResult;
+
+import com.wifi_zombie.WifiZombieProto.WifiInfo;
+import com.wifi_zombie.WifiZombieProto.WifiInfo.SecurityType;
 
 public class WifiInfoData {
 	// singletone var
@@ -40,5 +42,23 @@ public class WifiInfoData {
 	public int getSize()
 	{
 		return wifiInfoList.size();
+	}
+	public WifiInfo getWifiInfo() {
+		WifiInfo.Builder wifiInfo = WifiInfo.newBuilder();
+		
+		for (WifiDataItem data : wifiInfoList) {
+			wifiInfo.addWifiData(
+				WifiInfo.WifiData.newBuilder()
+					.setSsid(data.getSSID())
+					.setBssid(data.getBSSID())
+					.setStrength(data.getStrength())
+					.setChannel(data.getChannel())
+					.setBandwidth(data.getBandWidth())
+					.setSecurity(SecurityType.NONE)
+//					.setSecurity(data.getSecurityMode()))
+			);
+		}
+		
+		return wifiInfo.build();
 	}
 }

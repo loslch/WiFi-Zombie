@@ -1,11 +1,5 @@
 package com.wifi_zombie;
 
-import source.MyFragment;
-
-import com.data.WifiInfoData;
-import com.fragments.FragmentManager;
-import com.fragments.SlideMenuFragment.OnArticleSelectedListener;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,15 +11,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.data.WifiInfoData;
+import com.fragments.MyFragment;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
 	
@@ -95,7 +91,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		// service에서 wifi 정보 업데이트 여부를 받아오는 리스너 등록
 		Intent lIntent = new Intent(MainActivity.this, WifiService.class);
 		startService(lIntent);
-
+		bindService(new Intent(MainActivity.this, WifiService.class), mConnection, Context.BIND_AUTO_CREATE);
+		
+		// service start
+//		Intent lIntent = new Intent(MainActivity.this, WifiService.class);
+//		lIntent.putExtra("Messenger", mActivityMessenger);
+//		startService(lIntent);
+//		try {          
+//			 wifiService.send(Message.obtain(null, AbstractService.MSG_REGISTER_CLIENT, 0, 0));
+//	        } 
+//	        catch (RemoteException e) {
+//	        	Log.i("wifi zombie", "아놔ㅡㅡ");
+//	        }
 		
 		mainT = this.getSupportFragmentManager().beginTransaction();
 		mainT.replace(R.id.activity_main, fmanager.getFragmentByMenu("Dashboard"));
@@ -112,6 +119,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         setSlidingActionBarEnabled(true);
 //        Log.i("wifi zombie", "onCreate");
     }
+    
     public void onArticleSelected(Uri articleUri){	//slide menu fragment에서 클릭 정보 받아옴 Uri로
     	String clickedMenu = articleUri.getQueryParameter("menu");
     	
@@ -127,6 +135,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         	}
         	currentScreen = clickedMenu;
     	}
+    	if(clickedMenu.equals("Outdoor Survey")) {
+    		getSlidingMenu().setSlidingEnabled(false);
+    	} else {
+    		getSlidingMenu().setSlidingEnabled(true);
+    	}
     }
     
     @Override
@@ -137,7 +150,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onResume() {
 //    	Log.i("wifi zombie", "onResume");
     	isPuased = false;
-    	bindService(new Intent(MainActivity.this, WifiService.class), mConnection, Context.BIND_AUTO_CREATE);
         super.onResume();
     }
     @Override
@@ -150,8 +162,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onDestroy() {	// 어플 끝나면 unbind함
         super.onDestroy();
         try {
-            wifiService.onDestroy();
-            
+            //wifiService.unbind();
         } catch (Throwable t) {
             Log.e("MainActivity", "Failed to unbind from the service", t);
         }

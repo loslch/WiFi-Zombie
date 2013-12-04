@@ -1,0 +1,57 @@
+package wifi_zombie;
+
+option java_package = "com.wifi_zombie";
+option java_outer_classname = "WifiZombieProto";
+
+message WifiInfo {    // WifiInfoData 클래스가 만드는 와이파이 정보
+
+  enum SecurityType {   // 보안 방법
+    NONE = 0;
+    PSK = 1;
+    WEP = 2;
+    EAP = 3;
+    WPA = 4;
+    WPA2 = 5;
+  }
+
+  message WifiData {    // 와이파이 정보의 단위
+    required string ssid = 1;         // AP Name
+    required string bssid = 2;        // MAC Addr
+    required int32 strength = 3;        // 신호의 세기
+    required int32 channel = 4;         // 채널 정보
+    required float bandwidth = 5;     // 2.4 or 5 GHz
+    required SecurityType security = 6 [default = NONE];
+                                      // 보안 방법
+  }
+
+  repeated WifiData wifi_data = 1;    // 와이파이 정보 리스트
+
+}
+
+message WifiSurvey {   // 파일로 저장되는 와이파이 정보
+
+  enum SurveyType {     // 서베이 타입
+    INDOOR = 0;
+    OUTDOOR = 1;
+  }
+
+  required string title = 1;              // 서베이 제목
+  optional string creator = 2;            // 제작자 이름
+  optional int64 created_time = 3;        // 제작 시간
+
+  required SurveyType survey_type = 4;    // 서베이 타입
+  optional string image_path = 5;         // 인도어 이미지 경로
+
+  message WifiItem {                  // 위치와 와이파이 정보 리스트
+    message Position {
+      required double x = 1;          // Latitude
+      required double y = 2;          // Longtitude
+    }
+
+    required Position position = 1;   // 위치 정보
+    required WifiInfo wifi_info = 2;  // 와이파이 정보(리스트)
+  }
+
+  repeated WifiItem wifi_item_list = 6;   // 위치를 포함한 와이파이 정보
+
+}
