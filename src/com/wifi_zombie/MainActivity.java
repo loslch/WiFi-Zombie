@@ -1,9 +1,5 @@
 package com.wifi_zombie;
 
-import com.data.WifiInfoData;
-import com.fragments.MyFragment;
-import com.fragments.SlideMenuFragment.OnArticleSelectedListener;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,15 +11,17 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.data.WifiInfoData;
+import com.fragments.MyFragment;
 
 public class MainActivity extends BaseActivity implements OnClickListener {
 	
@@ -121,6 +119,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         setSlidingActionBarEnabled(true);
 //        Log.i("wifi zombie", "onCreate");
     }
+    
     public void onArticleSelected(Uri articleUri){	//slide menu fragment에서 클릭 정보 받아옴 Uri로
     	String clickedMenu = articleUri.getQueryParameter("menu");
     	

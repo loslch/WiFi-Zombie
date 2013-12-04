@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/action_outdoor_menu"
+        android:icon="@drawable/ic_action_overflow"
+        android:showAsAction="always|collapseActionView">
+        <menu>
+            <item
+                android:id="@+id/action_outdoor_new"
+        android:icon="@drawable/ic_doc_empty_icon"
+                android:title="New"/>
+            <item
+                android:id="@+id/action_outdoor_save"
+        android:icon="@drawable/ic_save_icon"
+                android:title="Save"/>
+            <item
+                android:id="@+id/action_outdoor_load"
+        android:icon="@drawable/ic_folder_open_icon"
+                android:title="Load"/>
+            <item
+                android:id="@+id/action_outdoor_heatmap"
+        android:icon="@drawable/ic_layers_1_icon"
+                android:title="Enable Heatmap"/>
+            <item
+                android:id="@+id/action_outdoor_ssid"
+        android:icon="@drawable/ic_wifi_router_icon"
+                android:title="Select SSID"/>
+        </menu>
+    </item>
+</menu>

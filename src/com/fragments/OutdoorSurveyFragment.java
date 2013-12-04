@@ -1,30 +1,34 @@
 package com.fragments;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.data.WifiDataItem;
 import com.data.WifiInfoData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.wifi_zombie.R;
 import com.wifi_zombie.WifiZombieProto.WifiInfo;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey;
@@ -43,6 +47,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     private Context context;
     
     private List<WifiItem> lstWifiItem;
+    private Point currentLocation;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,11 +59,26 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		// Reload Option Menu
+		setHasOptionsMenu(true);
+		
+		// Initialize & Bind Something
+		initialize();
+        
+		setUpMapIfNeeded();
+	}
+	
+	private void initialize() {
 		context = getActivity().getApplicationContext();
 		
+		// Bind Layout & Event
 		btnSaveCurrentAPs = (Button) inflater.findViewById(R.id.btnSaveCurrentAPs);
 		btnSaveCurrentAPs.setOnClickListener(this);
+        
+		// Initialize List
+        lstWifiItem = new ArrayList<WifiItem>();
 
+        // Initialize Location Manager
         locationManager = (LocationManager) 
 				getActivity().getSystemService(Context.LOCATION_SERVICE);
         
@@ -85,9 +105,29 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
             //Show some generic error dialog because something must have gone wrong with location manager.
         }
         
-        lstWifiItem = new ArrayList<WifiItem>();
-        
-		setUpMapIfNeeded();
+        // Initialize Current Location
+        currentLocation = new Point();
+        double[] latlng = getCurrentlocation();
+        currentLocation.lat = latlng[0];
+        currentLocation.lng = latlng[1];
+	}
+
+	private void setUpMapIfNeeded() {
+		// Do a null check to confirm that we have not already instantiated the
+		// map.
+		if (mMap == null) {
+			// Try to obtain the map from the SupportMapFragment.
+			mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+			// Check if we were successful in obtaining the map.
+			if (mMap != null) {
+		        mMap.setMyLocationEnabled(true);
+				moveToCurrentLocation();
+			}
+ 
+            //This is how you register the LocationSource
+            mMap.setLocationSource(this);
+		}
 	}
  
     @Override
@@ -121,6 +161,38 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	        mMap = null;
 	    }
 	}
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.outdoor, menu);
+        return;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.action_outdoor_new:
+            Toast.makeText(context, "New Menu selected", Toast.LENGTH_SHORT).show();
+            break;
+        case R.id.action_outdoor_save:
+            Toast.makeText(context, "Save Menu selected", Toast.LENGTH_SHORT).show();
+            break;
+        case R.id.action_outdoor_load:
+            Toast.makeText(context, "Load Menu selected", Toast.LENGTH_SHORT).show();
+            break;
+        case R.id.action_outdoor_heatmap:
+            Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
+            break;
+        case R.id.action_outdoor_ssid:
+            Toast.makeText(context, "SSID Menu selected", Toast.LENGTH_SHORT).show();
+            break;
+        default:
+        	break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 	
 	@Override
 	public void onClick(View view) {
@@ -134,21 +206,32 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 			break;
 		}		
 	}
-	
+
 	private void storeCurrentWifiItem() {
 		WifiItem currentWifiItem = getWifiItem();
 		lstWifiItem.add(currentWifiItem);
+		
+		Point Share = new Point();
+		Share.lat = currentWifiItem.getPosition().getX();
+		Share.lng = currentWifiItem.getPosition().getY();
+
+//		TextIconGenerator tc = new TextIconGenerator(this);
+//		Bitmap bmp = tc.makeIcon(String.valueOf(lstWifiItem.size()));
+		
+		mMap.addMarker(new MarkerOptions()
+//		.icon(BitmapDescriptorFactory.fromBitmap(bmp))
+		.position(new LatLng(Share.lat, Share.lng))
+		.title(String.valueOf(lstWifiItem.size())));
 	}
 	
 	private WifiItem getWifiItem() {
 		/* Wifi Info를 가져와서 위치 정보를 가진 Wifi Item으로 만든다 */
 		WifiInfoData wifiInfoData = super.wifidata;
 		WifiInfo wifiInfo = wifiInfoData.getWifiInfo();
-		double[] currentPosition = getlocation();
 		WifiItem wifiItem = WifiItem.newBuilder()
 				.setPosition(Position.newBuilder()
-						.setX(currentPosition[0])
-						.setY(currentPosition[1])
+						.setX(currentLocation.lat)
+						.setY(currentLocation.lng)
 						.build())
 				.setWifiInfo(wifiInfo)
 				.build();
@@ -170,39 +253,12 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		return wifiSurveyBuilder.build();
 	}
 
-	private void setUpMapIfNeeded() {
-		// Do a null check to confirm that we have not already instantiated the
-		// map.
-		if (mMap == null) {
-			// Try to obtain the map from the SupportMapFragment.
-			mMap = ((SupportMapFragment) getActivity().getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-			// Check if we were successful in obtaining the map.
-			if (mMap != null) {
-				setUpMap();
-			}
- 
-            //This is how you register the LocationSource
-            mMap.setLocationSource(this);
-		}
-	}
-
-	private void setUpMap() {
-        mMap.setMyLocationEnabled(true);
-		getCurrentLocation();
-	}
-
 	private class Point {
 		public double lat = 0;
 		public double lng = 0;
 	}
 
-	private void getCurrentLocation() {
-		Point Share = new Point();
-		double[] d = getlocation();
-		Share.lat = d[0];
-		Share.lng = d[1];
-
+	private void moveToCurrentLocation() {
 //		Share.lat = 37.5665;	// SEOUL
 //		Share.lng = 126.9780;
 		
@@ -211,10 +267,10 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 //				.title("Current Location"));
 
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-				Share.lat, Share.lng), 17));
+				currentLocation.lat, currentLocation.lng), 17));
 	}
 
-	public double[] getlocation() {
+	public double[] getCurrentlocation() {
 		List<String> providers = locationManager.getProviders(true);
 
 		Location l = null;
@@ -231,54 +287,52 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		}
 		return gps;
 	}
-    
-   @Override
-   public void activate(OnLocationChangedListener listener) 
-   {
-       mListener = listener;
-   }
-    
-   @Override
-   public void deactivate() 
-   {
-       mListener = null;
-   }
 
-   @Override
-   public void onLocationChanged(Location location) 
-   {
-	    if( mListener != null )
-	    {
-	        mListener.onLocationChanged( location );
-	 
+	
+	@Override
+	public void activate(OnLocationChangedListener listener) {
+		mListener = listener;
+	}
+
+	@Override
+	public void deactivate() {
+		mListener = null;
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		/* GPS 위치가 변경되면 멤버 변수에 적용 */
+		currentLocation.lat = location.getLatitude();
+		currentLocation.lng = location.getLongitude();
+		
+		if (mListener != null) {
+			mListener.onLocationChanged(location);
+
 	        LatLngBounds bounds = this.mMap.getProjection().getVisibleRegion().latLngBounds;
 	 
 	        if(!bounds.contains(new LatLng(location.getLatitude(), location.getLongitude())))
 	        {
 	             //Move the camera to the user's location once it's available!
 	             mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-	        }
-	    }
-   }
+			}
+		}
+	}
 
-   @Override
-   public void onProviderDisabled(String provider) 
-   {
-       // TODO Auto-generated method stub
-       Toast.makeText(context, "provider disabled", Toast.LENGTH_SHORT).show();
-   }
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		Toast.makeText(context, "provider disabled", Toast.LENGTH_SHORT).show();
+	}
 
-   @Override
-   public void onProviderEnabled(String provider) 
-   {
-       // TODO Auto-generated method stub
-       Toast.makeText(context, "provider enabled", Toast.LENGTH_SHORT).show();
-   }
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		Toast.makeText(context, "provider enabled", Toast.LENGTH_SHORT).show();
+	}
 
-   @Override
-   public void onStatusChanged(String provider, int status, Bundle extras) 
-   {
-       // TODO Auto-generated method stub
-       Toast.makeText(context, "status changed", Toast.LENGTH_SHORT).show();
-   }
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		Toast.makeText(context, "status changed", Toast.LENGTH_SHORT).show();
+	}
 }
