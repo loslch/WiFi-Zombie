@@ -21,6 +21,7 @@ public class WifiService extends Service {
 	public static final int MSG_REGISTER_CLIENT = 9991;
 	public static final int MSG_UNREGISTER_CLIENT = 9992;
 	public static final int MSG_UPDATE_INFO = 9993;
+	public static final int MSG_REFRESH = 9994;
 	// WifiManager variable
 	private WifiManager wifimanager = null;
 	// Wifi Data
@@ -49,6 +50,10 @@ public class WifiService extends Service {
 					case MSG_REGISTER_CLIENT:
 						ToActivityMessenger = msg.replyTo;
 						wifimanager.startScan();
+						break;
+					case MSG_REFRESH:
+						wifimanager.startScan(); // for refresh
+						break;
 					}
 				}
 			});

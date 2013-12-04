@@ -14,6 +14,9 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -172,6 +175,31 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         	
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+    	return true;
+    }
     
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.action_menu_refresh:
+//        	Toast.makeText(this, "Refresh was clicked", Toast.LENGTH_SHORT).show();
+        	try {
+				Message msg = Message.obtain(null, WifiService.MSG_REFRESH, 0, 0);
+				msg.replyTo = FromServiceMessenger;
+				ToServiceMessenger.send(msg);
+//				Log.i("wifi zombie", "send message to service success");
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+//				Log.i("wifi zombie", "send message to service failed");
+			}
+        	break;
+        }
+        
+    	return super.onOptionsItemSelected(item);
+    }
   
 }

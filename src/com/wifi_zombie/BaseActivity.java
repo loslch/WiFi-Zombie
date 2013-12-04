@@ -81,21 +81,5 @@ public class BaseActivity extends SlidingFragmentActivity implements OnArticleSe
         .show();
     }*/
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-    	return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.action_menu_refresh:
-        	Toast.makeText(this, "Refresh was clicked", Toast.LENGTH_SHORT).show();
-        	break;
-        }
-        
-    	return true;
-    }
+
 }
