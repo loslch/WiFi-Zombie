@@ -14,7 +14,7 @@
             android:layout_height="wrap_content" >
 
             <RelativeLayout
-                android:layout_width="15pt"
+                android:layout_width="30pt"
                 android:layout_height="match_parent" >
 
                 <TextView
@@ -49,6 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5pt"
+                android:layout_marginTop="3pt"
+                android:layout_marginBottom="3pt"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -72,7 +74,7 @@
                 <ProgressBar
                     android:id="@+id/chlist_item_progressbar"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="50pt"
+                    android:layout_width="100pt"
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </TableRow>

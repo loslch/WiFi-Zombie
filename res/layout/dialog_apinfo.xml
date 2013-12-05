@@ -19,21 +19,21 @@
                 android:layout_height="wrap_content"
                 android:text="BSSID:"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" : " 
-                android:textColor="#ffffff"/>
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/dialog_apinfon_bssid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BSSID"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
         </TableRow>
 
         <TableRow
@@ -47,21 +47,21 @@
                 android:layout_height="wrap_content"
                 android:text="Channel"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" : " 
-                android:textColor="#ffffff"/>
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/dialog_apinfon_channel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Channel"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
         </TableRow>
 
         <TableRow
@@ -75,21 +75,21 @@
                 android:layout_height="wrap_content"
                 android:text="Frequency"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" : "
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/dialog_apinfon_frequency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Frequency"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
         </TableRow>
 
         <TableRow
@@ -103,14 +103,14 @@
                 android:layout_height="wrap_content"
                 android:text="Signal"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" : "
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Strength"
-                    android:textColor="#ffffff" />
+                    android:textColor="#000000" />
 
                 <ProgressBar
                     android:id="@+id/dialog_apinfon_strengthProgress"
@@ -143,21 +143,21 @@
                 android:layout_height="wrap_content"
                 android:text="Security"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" : " 
-                android:textColor="#ffffff"/>
+                android:textColor="#000000"/>
 
             <TextView
                 android:id="@+id/dialog_apinfon_security"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Security"
-                android:textColor="#ffffff" />
+                android:textColor="#000000" />
         </TableRow>
     </TableLayout>
 

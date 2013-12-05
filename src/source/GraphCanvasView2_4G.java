@@ -51,18 +51,18 @@ public class GraphCanvasView2_4G extends MyView {
 		// channel line
 		canvas.drawLine(leftAndBottomMargin + (xAxisLength / chNum2_4G) * 2,
 				this.getHeight() - leftAndBottomMargin, leftAndBottomMargin
-						+ (xAxisLength / chNum2_4G) * 2, leftAndBottomMargin,
+						+ (xAxisLength / chNum2_4G) * 2, rightAndTopMargin,
 				paint);
 		for (int i = 3; i <= chNum2_4G - 4; i++)
 			canvas.drawLine(
 					leftAndBottomMargin + (xAxisLength / chNum2_4G) * i,
 					this.getHeight() - leftAndBottomMargin, leftAndBottomMargin
 							+ (xAxisLength / chNum2_4G) * i,
-					leftAndBottomMargin, paint);
+							rightAndTopMargin, paint);
 		canvas.drawLine(leftAndBottomMargin + (xAxisLength / chNum2_4G)
 				* (chNum2_4G - 2), this.getHeight() - leftAndBottomMargin,
 				leftAndBottomMargin + (xAxisLength / chNum2_4G)
-						* (chNum2_4G - 2), leftAndBottomMargin, paint);
+						* (chNum2_4G - 2), rightAndTopMargin, paint);
 
 		if ((data != null) && (data.getSize() != 0)) // graph ±×¸²
 		{
@@ -70,7 +70,7 @@ public class GraphCanvasView2_4G extends MyView {
 				int ch = data.getWifiInfoData(i).getChannel();
 				int strength = data.getWifiInfoData(i).getStrength();
 
-				if (ch != 14) {
+				if (ch < 14) {
 					Paint graphPaint = new Paint();
 					graphPaint.setTextSize(30);
 					graphPaint.setColor(Color
@@ -105,7 +105,7 @@ public class GraphCanvasView2_4G extends MyView {
 									* (yAxisLength / signalNum)
 									+ rightAndTopMargin, graphPaint);
 				}
-				else
+				else if(ch == 14)
 				{
 					RectF rect = new RectF(
 							(xAxisLength / chNum2_4G) * (ch+1) + strokeWidth,

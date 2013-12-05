@@ -6,64 +6,101 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="5pt">
 
-        <TextView
-            android:id="@+id/aplist_item_ssid"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5pt"
-            android:text="Network name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-		<TextView
-            android:id="@+id/aplist_item_bandwidth"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/aplist_item_issecured"
+                android:layout_width="10pt"
+                android:layout_height="10pt"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                 />
+
+        </RelativeLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2pt"
-            android:text="Bandwidth" />
-        <ImageView
-            android:id="@+id/aplist_item_issecured"
-            android:layout_width="10pt"
-            android:layout_height="10pt"
-            android:src="@drawable/security" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="3pt" >
+
+            <TextView
+                android:id="@+id/aplist_item_ssid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2pt"
+                android:text="Network name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/aplist_item_bssid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2pt"
+                android:text="BSSID"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5pt"
+        android:layout_marginLeft="15pt"
         android:layout_marginRight="5pt" >
 
         <TextView
             android:id="@+id/aplist_item_channel"
-            android:layout_width="wrap_content"
+            android:layout_width="20pt"
             android:layout_height="wrap_content"
+            android:textColor="#df656a"
             android:text="channel"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-
+		<TextView
+            android:id="@+id/aplist_item_band"
+            android:layout_width="15pt"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2pt"
+            android:textColor="#6590df"
+            android:text="Bandwidth" />
         <TextView
-            android:id="@+id/aplist_item_frequency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="frequency"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <ProgressBar
-            android:id="@+id/aplist_item_strength"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="40pt"
-            android:layout_height="wrap_content"
-            android:max="100" />
-
-    </LinearLayout>
-
-    <TextView
         android:id="@+id/aplist_item_security"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5pt"
+        android:textColor="#000000"
         android:text="security"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/aplist_item_signal"
+                android:layout_width="25pt"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15pt"
+                android:text="frequency"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#000000" />
+
+            <ProgressBar
+                android:id="@+id/aplist_item_strength"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="100pt"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2pt"
+                android:max="100" />
+
+        </LinearLayout>
 
 </LinearLayout>

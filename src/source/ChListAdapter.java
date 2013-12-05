@@ -56,6 +56,13 @@ public class ChListAdapter extends ArrayAdapter<int[]> {
             aps.setText(item[2]+" Aps");
             overlapping.setText(item[3]+" Overlapping Aps");
             rating.setProgress(item[1]);
+            
+            if(item[1] > 70)
+            	rating.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.progress_horizontal_green));
+            else if(item[1] > 30)
+            	rating.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.progress_horizontal_yellow));
+            else
+                rating.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.progress_horizontal_red));
         }
 		
 		return convertView;

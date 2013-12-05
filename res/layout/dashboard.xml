@@ -33,11 +33,10 @@
         android:id="@+id/dashboard_issecured"
         android:layout_width="10pt"
         android:layout_height="10pt"
-        android:src="@drawable/security" 
-        android:layout_marginTop="5pt" 
         android:layout_marginLeft="10pt"
         android:layout_marginRight="5pt"
-        android:visibility="invisible"/>
+        android:layout_marginTop="5pt"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"

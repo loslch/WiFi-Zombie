@@ -1,12 +1,15 @@
 package com.fragments;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import source.APListAdapter;
 import source.ChListAdapter;
 import source.MyFragment;
 import source.MyView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,8 +86,10 @@ public class RatingChannelFragment extends MyFragment {
 			if(super.wifidata.getWifiInfoData(i).getChannel()-2 >= 1)
 				chRating[super.wifidata.getWifiInfoData(i).getChannel()-2]+=((1*(-1)*super.wifidata.getWifiInfoData(i).getStrength())/100);
 		}
-		
-		for(int i=1 ; i<super.wifidata.getSize() ; i++)
+		// sorting¿ë var
+		ArrayList<int[]> list = new ArrayList<int[]>();	
+		ArrayList<Integer> perList = new ArrayList<Integer>();	
+		for(int i=1 ; i<MyView.chMax5G ; i++)
 		{
 			if ((i <= 14) || (i == 36) || (i == 40) || (i == 44) || (i == 48) || (i == 52)
 					|| (i == 56) || (i == 60) || (i == 64) || (i == 100)
@@ -92,8 +97,23 @@ public class RatingChannelFragment extends MyFragment {
 					|| (i == 120) || (i == 124) || (i == 128) || (i == 132)
 					|| (i == 136) || (i == 140) || (i == 149) || (i == 153)
 					|| (i == 157) || (i == 161) || (i == 165)) 
+			{
 				// channel num, %, aps, overlapping
-				chlist.add(new int[] {i, (int)(maxRating - chRating[i]*overlappingRate), ch[i], chOverlapping[i]});
+				int per = (int)(maxRating - chRating[i]*overlappingRate);
+				list.add(new int[] {i, per >= 0 ? per : 0, ch[i], chOverlapping[i]});
+//				Log.i("wifi zombie", i+" : "+(int)(maxRating - chRating[i]*overlappingRate)+"% "+ch[i]+"aps "+chOverlapping[i]+"over");
+				perList.add(per);
+			}
+		}
+		//sorting!!
+		Collection col = perList;
+		int max = list.size();
+		for(int i=0 ; i<max ; i++)
+		{
+			int num = perList.indexOf((Integer)Collections.min(col));
+			chlist.add(list.get(num));
+			list.remove(num);
+			perList.remove(num);
 		}
 	}
 }

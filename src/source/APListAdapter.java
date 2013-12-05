@@ -9,6 +9,7 @@ import com.wifi_zombie.R.id;
 
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,19 +46,26 @@ public class APListAdapter extends ArrayAdapter<WifiDataItem>{
         if(item != null)
         {
             TextView ssid = (TextView) convertView.findViewById(R.id.aplist_item_ssid);
-            TextView frequency = (TextView) convertView.findViewById(R.id.aplist_item_frequency);
+            TextView bssid = (TextView) convertView.findViewById(R.id.aplist_item_bssid);
+            TextView signal = (TextView) convertView.findViewById(R.id.aplist_item_signal);
             TextView channel = (TextView) convertView.findViewById(R.id.aplist_item_channel);
             TextView security = (TextView) convertView.findViewById(R.id.aplist_item_security);
-            TextView bandwidth = (TextView) convertView.findViewById(R.id.aplist_item_bandwidth);
+            TextView bandwidth = (TextView) convertView.findViewById(R.id.aplist_item_band);
             ImageView isSecured = (ImageView) convertView.findViewById(R.id.aplist_item_issecured);
             ProgressBar strength = (ProgressBar) convertView.findViewById(R.id.aplist_item_strength);
- 
-            ssid.setText(item.getSSID()+" ("+item.getBSSID()+")");
+           
+            strength.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.progress_horizontal_aplist));
+            
+            ssid.setText(Html.fromHtml("<b>"+item.getSSID()+"</b>"));
+            bssid.setText("("+item.getBSSID()+")");
             channel.setText("CH "+item.getChannel()+" ");	// 채널은 frequency 가지고 계산한당
-            frequency.setText(item.getFrequency() + "MHz ");
+            signal.setText(item.getStrength() + "dbm");
             security.setText("Secured by ["+item.getSecurityMode()+"]");
             bandwidth.setText(item.getBandWidth()+"G");
-            isSecured.setVisibility(item.isSecured());
+            if(item.isSecured())
+            	isSecured.setBackgroundResource(R.drawable.security);
+            else
+            	isSecured.setBackgroundResource(R.drawable.no_security);
             strength.setProgress(maxProgress + item.getStrength());       
         }
  
