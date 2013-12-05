@@ -17,10 +17,10 @@
                 android:id="@+id/action_outdoor_load"
         android:icon="@drawable/ic_folder_open_icon"
                 android:title="Load"/>
-            <item
+<!--             <item
                 android:id="@+id/action_outdoor_heatmap"
         android:icon="@drawable/ic_layers_1_icon"
-                android:title="Enable Heatmap"/>
+                android:title="Enable Heatmap"/> -->
             <item
                 android:id="@+id/action_outdoor_ssid"
         android:icon="@drawable/ic_wifi_router_icon"

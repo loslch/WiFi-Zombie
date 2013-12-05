@@ -1,11 +1,14 @@
 package com.fragments;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import source.MyFragment;
-
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -34,8 +38,10 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.wifi_zombie.R;
 import com.wifi_zombie.WifiZombieProto.WifiInfo;
+import com.wifi_zombie.WifiZombieProto.WifiInfo.WifiData;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem;
@@ -51,7 +57,13 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     private Button btnSaveCurrentAPs; 
     private Context context;
     
+    /* 서베이 정보 */
+    private String surveyTitle;
+    private String surveyCreator;
+    private Calendar surveyCreatedTime;
+    private SurveyType surveyType;
     private List<WifiItem> lstWifiItem;
+    
     private Point currentLocation;
 
 	@Override
@@ -69,19 +81,47 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		
 		// Initialize & Bind Something
 		initialize();
+		
+		// Restore state
+		if(savedInstanceState != null)
+			onRestoreInstanceState(savedInstanceState);
         
 		setUpMapIfNeeded();
 	}
 	
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		if(savedInstanceState.containsKey("outdoorSurvey")) {
+			WifiSurvey wifiSurvey = null;
+			try {
+				wifiSurvey = WifiSurvey.parseFrom(savedInstanceState.getByteArray("outdoorSurvey"));
+			} catch (InvalidProtocolBufferException e) {
+				e.printStackTrace();
+			}
+			
+			if(wifiSurvey != null && wifiSurvey.getWifiItemListCount()>0) {
+				surveyTitle = wifiSurvey.getTitle();
+				surveyCreator = wifiSurvey.getCreator();
+				surveyCreatedTime = Calendar.getInstance();
+				surveyCreatedTime.setTimeInMillis(wifiSurvey.getCreatedTime());
+				surveyType = wifiSurvey.getSurveyType();
+				lstWifiItem = wifiSurvey.getWifiItemListList();
+			}
+		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+
+		savedInstanceState.putByteArray("outdoorSurvey", generateWifiSurvey().toByteArray());
+	}
+    
 	private void initialize() {
 		context = getActivity().getApplicationContext();
 		
 		// Bind Layout & Event
 		btnSaveCurrentAPs = (Button) inflater.findViewById(R.id.btnSaveCurrentAPs);
 		btnSaveCurrentAPs.setOnClickListener(this);
-        
-		// Initialize List
-        lstWifiItem = new ArrayList<WifiItem>();
 
         // Initialize Location Manager
         locationManager = (LocationManager) 
@@ -115,6 +155,13 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         double[] latlng = getCurrentlocation();
         currentLocation.lat = latlng[0];
         currentLocation.lng = latlng[1];
+        
+        // Initialize Local variables
+        surveyTitle = new String();
+        surveyCreator = new String();
+        surveyCreatedTime = Calendar.getInstance();
+        surveyType = SurveyType.OUTDOOR;
+        lstWifiItem = new ArrayList<WifiItem>();
 	}
 
 	private void setUpMapIfNeeded() {
@@ -129,6 +176,15 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 				mMap.setOnMarkerClickListener(this);
 		        mMap.setMyLocationEnabled(true);
 				moveToCurrentLocation();
+				
+				if(lstWifiItem.size() > 0) {
+					for (int i=0; i<lstWifiItem.size(); i++) {
+						Point share = new Point();
+						share.lat = lstWifiItem.get(i).getPosition().getX();
+						share.lng = lstWifiItem.get(i).getPosition().getY();
+						markOnMap(share, String.valueOf(i+1));
+					}
+				}
 			}
  
             //This is how you register the LocationSource
@@ -167,7 +223,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	        mMap = null;
 	    }
 	}
-    
+	
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     	super.onCreateOptionsMenu(menu, inflater);
@@ -187,9 +243,9 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         case R.id.action_outdoor_load:
             Toast.makeText(context, "Load Menu selected", Toast.LENGTH_SHORT).show();
             break;
-        case R.id.action_outdoor_heatmap:
-            Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
-            break;
+//        case R.id.action_outdoor_heatmap:
+//            Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
+//            break;
         case R.id.action_outdoor_ssid:
             Toast.makeText(context, "SSID Menu selected", Toast.LENGTH_SHORT).show();
             break;
@@ -205,7 +261,6 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		switch (view.getId()) {
 		case R.id.btnSaveCurrentAPs:
 			storeCurrentWifiItem();
-    		Toast.makeText(context, "저장", Toast.LENGTH_SHORT).show();
 			break;
 
 		default:
@@ -215,8 +270,48 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		Toast.makeText(context, marker.getSnippet(), Toast.LENGTH_SHORT).show();
+		final int wifiDataIndex = Integer.parseInt(marker.getSnippet())-1;
+		WifiInfo wifiInfo = lstWifiItem.get(wifiDataIndex).getWifiInfo();
 		
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("Wireless Networks");
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+        		getActivity(), android.R.layout.select_dialog_item);
+        for (WifiData data : wifiInfo.getWifiDataList()) {
+        	arrayAdapter.add(data.getSsid()+"\n"+data.getBssid());
+		}
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                StringBuffer wifiInfoStr = new StringBuffer();
+                WifiData data = lstWifiItem.get(wifiDataIndex).getWifiInfo().getWifiData(which);
+                wifiInfoStr.append("SSID: ").append(data.getSsid()).append("\n")
+			    			.append("BSSID: ").append(data.getBssid()).append("\n")
+			    			.append("Channel: ").append(data.getChannel()).append("\n")
+			    			.append("Bandwidth: ").append(data.getBandwidth()).append("\n")
+			    			.append("Strength: ").append(data.getStrength()).append("\n")
+			    			.append("Security: ").append(data.getSecurity());
+                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+                builderInner.setMessage(wifiInfoStr.toString());
+                builderInner.setTitle(data.getSsid());
+                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builderInner.show();
+            }
+        });
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+				
 		return false;
 	}
 
@@ -227,16 +322,20 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		Point Share = new Point();
 		Share.lat = currentWifiItem.getPosition().getX();
 		Share.lng = currentWifiItem.getPosition().getY();
-
+		
+		markOnMap(Share, String.valueOf(lstWifiItem.size()));
+	}
+	
+	private void markOnMap(Point share, String name) {
 		// Bubble Icon 생성
 		IconGenerator mIconGenerator = new IconGenerator(context);
-		mIconGenerator.setStyle(mIconGenerator.STYLE_RED);
-		Bitmap iconBitmap = mIconGenerator.makeIcon(String.valueOf(lstWifiItem.size()));
+		mIconGenerator.setStyle(mIconGenerator.STYLE_PURPLE);
+		Bitmap iconBitmap = mIconGenerator.makeIcon(name);
 		
 		mMap.addMarker(new MarkerOptions()
-		.snippet("#"+String.valueOf(lstWifiItem.size()))
+		.snippet(name)
 		.icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
-		.position(new LatLng(Share.lat, Share.lng)));
+		.position(new LatLng(share.lat, share.lng)));
 	}
 	
 	private WifiItem getWifiItem() {
@@ -257,10 +356,10 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	private WifiSurvey generateWifiSurvey() {
 		/* 다수의 Wifi Item과 Survey정보를 가진 Wifi Survey 생성 */
 		WifiSurvey.Builder wifiSurveyBuilder = WifiSurvey.newBuilder();
-		wifiSurveyBuilder.setTitle("title")
-			.setCreatedTime(0)
-			.setCreator("creator")
-			.setSurveyType(SurveyType.OUTDOOR);
+		wifiSurveyBuilder.setTitle(surveyTitle)
+			.setCreatedTime(surveyCreatedTime.getTimeInMillis())
+			.setCreator(surveyCreator)
+			.setSurveyType(surveyType.OUTDOOR);
 		for (WifiItem item : lstWifiItem) {
 			wifiSurveyBuilder.addWifiItemList(item);
 		}
@@ -316,38 +415,42 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 
 	@Override
 	public void onLocationChanged(Location location) {
-		/* GPS 위치가 변경되면 멤버 변수에 적용 */
-		currentLocation.lat = location.getLatitude();
-		currentLocation.lng = location.getLongitude();
-		
-		if (mListener != null) {
-			mListener.onLocationChanged(location);
-
-	        LatLngBounds bounds = this.mMap.getProjection().getVisibleRegion().latLngBounds;
-	 
-	        if(!bounds.contains(new LatLng(location.getLatitude(), location.getLongitude())))
-	        {
-	             //Move the camera to the user's location once it's available!
-	             mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+		try {
+			/* GPS 위치가 변경되면 멤버 변수에 적용 */
+			currentLocation.lat = location.getLatitude();
+			currentLocation.lng = location.getLongitude();
+			
+			if (mListener != null) {
+				mListener.onLocationChanged(location);
+	
+		        LatLngBounds bounds = this.mMap.getProjection().getVisibleRegion().latLngBounds;
+		 
+		        if(!bounds.contains(new LatLng(location.getLatitude(), location.getLongitude())))
+		        {
+		             //Move the camera to the user's location once it's available!
+		             mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
-		Toast.makeText(context, "provider disabled", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "provider disabled", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
 		// TODO Auto-generated method stub
-		Toast.makeText(context, "provider enabled", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "provider enabled", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		Toast.makeText(context, "status changed", Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "status changed", Toast.LENGTH_SHORT).show();
 	}
 }

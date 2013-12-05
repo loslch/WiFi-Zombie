@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <!-- This can go anywhere in your layout (see other demos for some examples). -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -31,15 +31,35 @@
           android:name="com.google.android.gms.maps.SupportMapFragment" />
     </LinearLayout>
     <LinearLayout 
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
+        android:padding="6dp"
         android:orientation="horizontal" >
+<!--         <Button 
+            android:id="@+id/btnUndo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/btnStyleopal"
+            android:layout_marginRight="4dp"
+            android:text="Undo" /> -->
         <Button 
             android:id="@+id/btnSaveCurrentAPs"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:text="Button" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/btnStyleopal"
+            android:layout_marginRight="4dp"
+            android:text="Save Current Signals" />
+<!--         <Button 
+            android:id="@+id/btnRedo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/btnStyleopal"
+            android:text="Redo" /> -->
     </LinearLayout>
 	
-</LinearLayout>
+</RelativeLayout>
