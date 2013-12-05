@@ -22,6 +22,10 @@ public class WifiService extends Service {
 	public static final int MSG_UNREGISTER_CLIENT = 9992;
 	public static final int MSG_UPDATE_INFO = 9993;
 	public static final int MSG_REFRESH = 9994;
+	// Interval var default 10sec
+	private int interval = 10000;	// millisec 단위
+	private boolean isInterval = false;
+	private boolean isRefresh = false;
 	// WifiManager variable
 	private WifiManager wifimanager = null;
 	// Wifi Data
@@ -32,13 +36,23 @@ public class WifiService extends Service {
 		public void onReceive(Context context, Intent intent) {
 //			Log.i("wifi zombie", "service sucess");
 			final String action = intent.getAction();
-			if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+			if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION) && (isInterval || isRefresh)) {
 				getWIFIScanResult(); // get WIFISCanResult
-				wifimanager.startScan(); // for refresh
+				isInterval = false;
+				isRefresh = false;
+				
 
-			} else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+			} else if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION) && (isInterval || isRefresh)) {
 				sendBroadcast(new Intent("wifi.ON_NETWORK_STATE_CHANGED"));
 			}
+		}
+	};
+	private Handler intervalHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			isInterval = true;
+			wifimanager.startScan(); // for refresh
+			intervalHandler.sendEmptyMessageDelayed(interval, interval);
 		}
 	};
 	private Messenger FromActivityMessenger = new Messenger(new Handler() { // activity에서  보낸 메세지 처리 handler포함하는 messenger
@@ -50,8 +64,10 @@ public class WifiService extends Service {
 					case MSG_REGISTER_CLIENT:
 						ToActivityMessenger = msg.replyTo;
 						wifimanager.startScan();
+						intervalHandler.sendEmptyMessage(interval);
 						break;
 					case MSG_REFRESH:
+						isRefresh = true;
 						wifimanager.startScan(); // for refresh
 						break;
 					}
@@ -73,6 +89,7 @@ public class WifiService extends Service {
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 		filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 		registerReceiver(mReceiver, filter);
+		
 //		if(info == null)
 //			Log.i("wifi zombie", "service create failed");
 //		Log.i("wifi zombie", "service create");
@@ -105,6 +122,11 @@ public class WifiService extends Service {
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return FromActivityMessenger.getBinder();
+	}
+	
+	class IntervalThread extends Thread
+	{
+		
 	}
 
 }

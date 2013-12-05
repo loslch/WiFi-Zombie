@@ -164,7 +164,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onDestroy() {	// 어플 끝나면 unbind함
         super.onDestroy();
         try {
-            //wifiService.unbind();
+        	isPuased = true;
+        	unbindService(mConnection);
+        	wifiService.onDestroy();
         } catch (Throwable t) {
             Log.e("MainActivity", "Failed to unbind from the service", t);
         }

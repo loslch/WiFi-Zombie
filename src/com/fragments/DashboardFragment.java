@@ -82,7 +82,10 @@ public class DashboardFragment extends MyFragment{
 			result += "\nBandwidth : ";
 			result += item.getBandWidth()+"G";
 			
-			img.setVisibility(item.isSecured());
+			if(item.isSecured())
+				img.setBackgroundResource(R.drawable.security);
+			else
+				img.setBackgroundResource(R.drawable.no_security);
 		}
 		else
 			result += "\nConnected nothing";

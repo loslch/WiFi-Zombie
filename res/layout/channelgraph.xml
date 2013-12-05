@@ -3,6 +3,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -12,7 +13,7 @@
         <Button
             android:id="@+id/channelgraph_btn1"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="20pt"
+            android:layout_width="25pt"
             android:layout_height="wrap_content"
             android:text="2.4G" />
 

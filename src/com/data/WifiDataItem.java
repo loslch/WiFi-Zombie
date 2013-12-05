@@ -5,14 +5,17 @@ import android.net.wifi.ScanResult;
 public class WifiDataItem {
 	private ScanResult APInfo;
 	private int channel=0;
-	private int isSecured;
+	private boolean isSecured;
 	private float bandWidth;
 	private String securityMode;
 	private boolean isConnected;
+	public static final String NONE = "NONE";
 	public static final String PSK = "PSK";
     public static final String WEP = "WEP";
     public static final String EAP = "EAP";
-	private final String[] securityModes = { WEP, PSK, EAP };
+    public static final String WPA = "WPA";
+    public static final String WPA2 = "WPA2";
+	private final String[] securityModes = { NONE, PSK, WEP, EAP, WPA, WPA2 };
 	
 	public WifiDataItem(ScanResult ap, boolean isCon)
 	{
@@ -25,7 +28,7 @@ public class WifiDataItem {
 	{
 		return isConnected;
 	}
-	public int isSecured()
+	public boolean isSecured()
 	{
 		return isSecured;
 	}
@@ -154,17 +157,17 @@ public class WifiDataItem {
 		}
 		return 0;
 	}
-	public int calcSecure()
+	public boolean calcSecure()
 	{
 		String cap = APInfo.capabilities;
-		for (int i = securityModes.length - 1; i >= 0; i--) {
+		for (int i = securityModes.length - 1; i > 0; i--) {
             if (cap.contains(securityModes[i])) {
                 securityMode =  securityModes[i];
-                return android.view.View.VISIBLE;
+                return true;
             }
 		}
-		securityMode = "";
-		return android.view.View.INVISIBLE;
+		securityMode = NONE;
+		return false;
 	}
 
 }

@@ -109,7 +109,7 @@ public class ChannelGraphFragment extends MyFragment {
 					graphView5G.setVisibility(View.VISIBLE);
 					graphView5G_axis.setVisibility(View.VISIBLE);
 					seekbar5G.setVisibility(View.VISIBLE);
-					
+					graphView5G.invalidate();
 					
 				}
 			}
@@ -120,6 +120,7 @@ public class ChannelGraphFragment extends MyFragment {
 	public void updateWifiData() {
 		super.updateWifiData();
 		graphView2_4G.updateData(super.wifidata);
+		graphView5G.updateData(super.wifidata);
 
 	}
 }
