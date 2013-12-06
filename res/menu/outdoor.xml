@@ -24,7 +24,7 @@
             <item
                 android:id="@+id/action_outdoor_ssid"
         android:icon="@drawable/ic_wifi_router_icon"
-                android:title="Select SSID"/>
+                android:title="Select Certain SSID"/>
         </menu>
     </item>
 </menu>

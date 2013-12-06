@@ -1,14 +1,20 @@
 package com.fragments;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import source.MyFragment;
+import source.WifiDataListAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,8 +28,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.data.WifiInfoData;
@@ -39,7 +46,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.wifi_zombie.FileDialog;
 import com.wifi_zombie.R;
+import com.wifi_zombie.SelectionMode;
 import com.wifi_zombie.WifiZombieProto.WifiInfo;
 import com.wifi_zombie.WifiZombieProto.WifiInfo.WifiData;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey;
@@ -63,6 +72,12 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     private Calendar surveyCreatedTime;
     private SurveyType surveyType;
     private List<WifiItem> lstWifiItem;
+    
+    private boolean hasChanged;
+    private String pathFromFileDialog;
+    private final int REQUEST_NEW = 0;
+    private final int REQUEST_SAVE = 1;
+    private final int REQUEST_LOAD = 2;
     
     private Point currentLocation;
 
@@ -104,7 +119,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 				surveyCreatedTime = Calendar.getInstance();
 				surveyCreatedTime.setTimeInMillis(wifiSurvey.getCreatedTime());
 				surveyType = wifiSurvey.getSurveyType();
-				lstWifiItem = wifiSurvey.getWifiItemListList();
+				lstWifiItem = new ArrayList<WifiItem>(wifiSurvey.getWifiItemListList());
 			}
 		}
 	}
@@ -117,6 +132,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	}
     
 	private void initialize() {
+		hasChanged = false;
 		context = getActivity().getApplicationContext();
 		
 		// Bind Layout & Event
@@ -176,19 +192,22 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 				mMap.setOnMarkerClickListener(this);
 		        mMap.setMyLocationEnabled(true);
 				moveToCurrentLocation();
-				
-				if(lstWifiItem.size() > 0) {
-					for (int i=0; i<lstWifiItem.size(); i++) {
-						Point share = new Point();
-						share.lat = lstWifiItem.get(i).getPosition().getX();
-						share.lng = lstWifiItem.get(i).getPosition().getY();
-						markOnMap(share, String.valueOf(i+1));
-					}
-				}
+				restoreMarker();
 			}
  
             //This is how you register the LocationSource
             mMap.setLocationSource(this);
+		}
+	}
+	
+	private void restoreMarker() {
+		if(lstWifiItem.size() > 0) {
+			for (int i=0; i<lstWifiItem.size(); i++) {
+				Point share = new Point();
+				share.lat = lstWifiItem.get(i).getPosition().getX();
+				share.lng = lstWifiItem.get(i).getPosition().getY();
+				markOnMap(share, String.valueOf(i+1));
+			}
 		}
 	}
  
@@ -235,19 +254,27 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.action_outdoor_new:
-            Toast.makeText(context, "New Menu selected", Toast.LENGTH_SHORT).show();
+        	discardSurveyData(REQUEST_NEW);
+//        	newSurvey();
             break;
         case R.id.action_outdoor_save:
-            Toast.makeText(context, "Save Menu selected", Toast.LENGTH_SHORT).show();
+			if(surveyTitle.isEmpty()) {
+				Toast.makeText(context, "You have to create new survey first.", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+        	openFileDialog(this.REQUEST_SAVE);
+//        	saveSurvey();
             break;
         case R.id.action_outdoor_load:
-            Toast.makeText(context, "Load Menu selected", Toast.LENGTH_SHORT).show();
+        	discardSurveyData(REQUEST_LOAD);
+//        	openFileDialog(this.REQUEST_LOAD);
+//        	loadSurvey();
             break;
 //        case R.id.action_outdoor_heatmap:
-//            Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
+//            toggleHeatmap();
 //            break;
         case R.id.action_outdoor_ssid:
-            Toast.makeText(context, "SSID Menu selected", Toast.LENGTH_SHORT).show();
+        	selectCertainSSID();
             break;
         default:
         	break;
@@ -255,11 +282,276 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 
         return super.onOptionsItemSelected(item);
     }
+    
+    private void newSurvey() {
+    	LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+    	final View view = inflater.inflate(R.layout.dialog_new_survey, null);
+    	
+    	final EditText etSurveyTitle = (EditText) view.findViewById(R.id.etSurveyTitle);
+    	final EditText etSurveyCreator = (EditText) view.findViewById(R.id.etSurveyCreator);
+    	
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("Create New Survey");
+        builderSingle.setView(view);
+        builderSingle.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	if(etSurveyTitle.getText().toString().isEmpty() ||
+            		etSurveyCreator.getText().toString().isEmpty()) {
+            		Toast.makeText(context, "You must put the title and creator.", Toast.LENGTH_SHORT).show();
+            		return;
+            	}
+            	surveyTitle = etSurveyTitle.getText().toString();
+            	surveyCreator = etSurveyCreator.getText().toString();
+            	surveyCreatedTime = Calendar.getInstance();
+            	surveyType = SurveyType.OUTDOOR;
+            	lstWifiItem = new ArrayList<WifiItem>();
+        		mMap.clear();
+        		hasChanged = true;
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+    
+    private void openFileDialog(int requestCode) {
+    	// create a File object for the parent directory
+    	File zombieDirectory = new File("/sdcard/Application/wifi-zombie");
+    	// have the object build the directory structure, if needed.
+    	zombieDirectory.mkdirs();
+    	
+    	Intent intent = new Intent(context, FileDialog.class);
+    	intent.putExtra(FileDialog.START_PATH, "/sdcard/Application/wifi-zombie");
+        
+        //can user select directories or not
+        intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
+        
+        //alternatively you can set file filter
+        intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "zombie" });
+        
+        if(requestCode == this.REQUEST_SAVE) {
+        	intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_CREATE);
+        } else {
+        	intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);
+        }
+        
+        startActivityForResult(intent, requestCode);
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == getActivity().RESULT_OK) {
+            pathFromFileDialog = data.getStringExtra(FileDialog.RESULT_PATH);
+            pathFromFileDialog.trim();
+            String[] filepath = pathFromFileDialog.split("/");
+            String filename = filepath[filepath.length-1];
+            if(filename.length() < 1 || !filename.matches("^[a-zA-Z0-9[.][_][-]]+")) {
+            	Toast.makeText(context, "File name is not allowed.", Toast.LENGTH_SHORT).show();
+            	return;
+            }
+            
+            if(!pathFromFileDialog.endsWith(".zombie")) {
+            	pathFromFileDialog = pathFromFileDialog.concat(".zombie");
+            }
+
+            if (requestCode == REQUEST_SAVE) {
+            	saveSurvey();
+            } else if (requestCode == REQUEST_LOAD) {
+            	loadSurvey();
+            }
+
+        } else if (resultCode == getActivity().RESULT_CANCELED) {
+        	pathFromFileDialog = "";
+        }
+
+    }
+    
+    private void saveSurvey() {
+    	LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+    	final View view = inflater.inflate(R.layout.dialog_save_survey, null);
+    	
+    	final TextView tvSavePath = (TextView) view.findViewById(R.id.tvSavePath);
+    	tvSavePath.setText("FILE NAME : " + pathFromFileDialog);
+    	
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("Export Survey Data");
+        builderSingle.setView(view);
+        builderSingle.setPositiveButton("Export", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	String filePath = pathFromFileDialog;
+            	byte[] surveyStream = generateWifiSurvey().toByteArray();
+            	File file = new File(filePath);
+            	FileOutputStream fos;
+            	try {
+            	    fos = new FileOutputStream(file);
+            	    fos.write(surveyStream);
+            	    fos.flush();
+            	    fos.close();
+            	    hasChanged = false;
+            	    
+	            	Toast.makeText(context, "Success Export Survey Data.", Toast.LENGTH_SHORT).show();
+            	} catch (FileNotFoundException e) {
+            	    // handle exception
+	            	Toast.makeText(context, "Fail Export Survey Data.", Toast.LENGTH_SHORT).show();
+            	} catch (IOException e) {
+            	    // handle exception
+	            	Toast.makeText(context, "Fail Export Survey Data.", Toast.LENGTH_SHORT).show();
+            	}
+
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+    
+    private void loadSurvey() {
+    	LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+    	final View view = inflater.inflate(R.layout.dialog_load_survey, null);
+    	
+    	final TextView tvLoadPath = (TextView) view.findViewById(R.id.tvLoadPath);
+    	tvLoadPath.setText("FILE NAME : " + pathFromFileDialog);
+    	
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("Import Exist Survey");
+        builderSingle.setView(view);
+        builderSingle.setPositiveButton("Import", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	String filePath = pathFromFileDialog;
+            	WifiSurvey wifiSurvey = null;
+            	File file = new File(filePath);
+            	FileInputStream fis;
+            	try {
+            		fis = new FileInputStream(file);
+                	wifiSurvey = WifiSurvey.parseFrom(fis);
+            		fis.close();
+            	} catch (FileNotFoundException e) {
+            	    // handle exception
+	            	Toast.makeText(context, "Fail Import Survey Data.", Toast.LENGTH_SHORT).show();
+            	} catch (IOException e) {
+            	    // handle exception
+	            	Toast.makeText(context, "Fail Import Survey Data.", Toast.LENGTH_SHORT).show();
+            	}
+            	
+            	if(wifiSurvey != null) {
+            		if(wifiSurvey.getSurveyType() != SurveyType.OUTDOOR) {
+            			Toast.makeText(context, "Fail Import Survey Data.", Toast.LENGTH_SHORT).show();
+            			return;
+            		}
+            		mMap.clear();
+            		hasChanged = false;
+	            	surveyTitle = wifiSurvey.getTitle();
+	            	surveyCreator = wifiSurvey.getCreator();
+	            	surveyCreatedTime = Calendar.getInstance();
+	            	surveyCreatedTime.setTimeInMillis(wifiSurvey.getCreatedTime());
+					surveyType = wifiSurvey.getSurveyType();
+	            	lstWifiItem = new ArrayList<WifiItem>(wifiSurvey.getWifiItemListList());
+	            	restoreMarker();
+
+	            	Toast.makeText(context, "Success Import Survey Data.", Toast.LENGTH_SHORT).show();
+            	}
+            	
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+    
+    private void toggleHeatmap() {
+      Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
+    	
+    }
+    
+    private void selectCertainSSID() {
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("Select Certain SSID");
+        builderSingle.setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	surveyTitle = "";
+            	surveyCreator = "";
+            	surveyCreatedTime = Calendar.getInstance();
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+    }
+    
+    private void discardSurveyData(final int request) {
+    	if(hasChanged) {
+			AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+	        builderSingle.setIcon(R.drawable.icon);
+	        builderSingle.setTitle("Discard Survey Data");
+	        builderSingle.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+	            @Override
+	            public void onClick(DialogInterface dialog, int which) {
+	            	switch (request) {
+					case REQUEST_NEW:
+						newSurvey();
+						break;
+					case REQUEST_LOAD:
+						openFileDialog(request);
+						break;
+					}
+	                dialog.dismiss();
+	            }
+	        });
+	        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	            @Override
+	            public void onClick(DialogInterface dialog, int which) {
+	                dialog.dismiss();
+	            }
+	        });
+	        builderSingle.show();
+    	} else {
+        	switch (request) {
+			case REQUEST_NEW:
+				newSurvey();
+				break;
+			case REQUEST_LOAD:
+				openFileDialog(request);
+				break;
+			}
+    	}
+    }
 	
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.btnSaveCurrentAPs:
+			if(surveyTitle.isEmpty()) {
+				Toast.makeText(context, "You have to create new survey first.", Toast.LENGTH_SHORT).show();
+				return;
+			}
 			storeCurrentWifiItem();
 			break;
 
@@ -269,19 +561,15 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	}
 	
 	@Override
-	public boolean onMarkerClick(Marker marker) {
+	public boolean onMarkerClick(final Marker marker) {
 		final int wifiDataIndex = Integer.parseInt(marker.getSnippet())-1;
-		WifiInfo wifiInfo = lstWifiItem.get(wifiDataIndex).getWifiInfo();
+		WifiInfo wifiInfo = lstWifiItem.get(wifiDataIndex).getWifiInfo();		
+        WifiDataListAdapter adapter = new WifiDataListAdapter(getActivity(), R.layout.aplist_item, wifiInfo.getWifiDataList());
 		
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
         builderSingle.setIcon(R.drawable.icon);
         builderSingle.setTitle("Wireless Networks");
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-        		getActivity(), android.R.layout.select_dialog_item);
-        for (WifiData data : wifiInfo.getWifiDataList()) {
-        	arrayAdapter.add(data.getSsid()+"\n"+data.getBssid());
-		}
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+        builderSingle.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 StringBuffer wifiInfoStr = new StringBuffer();
@@ -304,6 +592,16 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
                 builderInner.show();
             }
         });
+        builderSingle.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	int index = Integer.parseInt(marker.getSnippet())-1;
+            	lstWifiItem.remove(index);
+            	mMap.clear();
+				restoreMarker();
+                dialog.dismiss();
+            }
+        });
         builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -324,6 +622,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		Share.lng = currentWifiItem.getPosition().getY();
 		
 		markOnMap(Share, String.valueOf(lstWifiItem.size()));
+		hasChanged = true;
 	}
 	
 	private void markOnMap(Point share, String name) {
