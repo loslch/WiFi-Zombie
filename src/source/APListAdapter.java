@@ -49,18 +49,18 @@ public class APListAdapter extends ArrayAdapter<WifiDataItem>{
             TextView bssid = (TextView) convertView.findViewById(R.id.aplist_item_bssid);
             TextView signal = (TextView) convertView.findViewById(R.id.aplist_item_signal);
             TextView channel = (TextView) convertView.findViewById(R.id.aplist_item_channel);
-            TextView security = (TextView) convertView.findViewById(R.id.aplist_item_security);
+//            TextView security = (TextView) convertView.findViewById(R.id.aplist_item_security);
             TextView bandwidth = (TextView) convertView.findViewById(R.id.aplist_item_band);
             ImageView isSecured = (ImageView) convertView.findViewById(R.id.aplist_item_issecured);
             ProgressBar strength = (ProgressBar) convertView.findViewById(R.id.aplist_item_strength);
-           
+            // progress bar setting
             strength.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.progress_horizontal_aplist));
             
             ssid.setText(Html.fromHtml("<b>"+item.getSSID()+"</b>"));
             bssid.setText("("+item.getBSSID()+")");
             channel.setText("CH "+item.getChannel()+" ");	// 채널은 frequency 가지고 계산한당
             signal.setText(item.getStrength() + "dbm");
-            security.setText("Secured by ["+item.getSecurityMode()+"]");
+//            security.setText("Secured by ["+item.getSecurityMode()+"]");
             bandwidth.setText(item.getBandWidth()+"G");
             if(item.isSecured())
             	isSecured.setBackgroundResource(R.drawable.security);
