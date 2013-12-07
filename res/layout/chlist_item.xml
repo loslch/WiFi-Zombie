@@ -25,6 +25,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="5pt"
                     android:text="ch"
+                    android:textColor="#e84a5f"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </RelativeLayout>
@@ -40,6 +41,7 @@
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="5pt"
+                    android:textColor="#aaffffff"
                     android:text="100%"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -61,14 +63,16 @@
                         android:id="@+id/chlist_item_aps"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0 APs" />
+                        android:text="0 APs"
+                        android:textColor="#84848c" />
 
                     <TextView
                         android:id="@+id/chlist_item_overlapping"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3pt"
-                        android:text="0 Overlapping APs" />
+                        android:text="0 Overlapping APs"
+                        android:textColor="#84848c" />
                 </LinearLayout>
 
                 <ProgressBar

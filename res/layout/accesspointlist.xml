@@ -2,22 +2,91 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#474751"  >
+<!-- 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="20pt"
+    android:layout_marginLeft="3pt"
+    android:layout_marginRight="3pt"
+    android:layout_marginTop="3pt"
+    android:layout_marginBottom="3pt"
+    android:background="#ffffffff" >
 
-<TextView
+    <TextView
         android:id="@+id/txt_aplist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_marginLeft="5pt"
         android:layout_marginTop="2pt"
-        android:textColor="#0ab5d7"
         android:text="AccessPoint List"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textColor="#ffffffff" />
 
-<ListView
-    android:id="@+id/aplist"
+</RelativeLayout> -->
+<!-- 
+<TextView
+    android:id="@+id/textView1"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-</ListView>
+    android:layout_height="1pt"
+    android:background="#ffffcc99" />
+ -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2pt"
+            android:layout_marginTop="5pt" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Connectable network list"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#aaffffff" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="30pt"
+                android:layout_height="1pt"
+                android:layout_centerHorizontal="true"
+                android:background="#e84a5f" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="3pt"
+        android:layout_marginBottom="3pt"
+        android:layout_marginLeft="3pt"
+        android:layout_marginRight="3pt"
+        android:background="#00ffffff" >
+
+    <ListView
+        android:id="@+id/aplist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         >
+    </ListView>
+
+</LinearLayout>
 
 </LinearLayout>

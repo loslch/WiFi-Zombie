@@ -28,7 +28,7 @@ public class GraphCanvasView2_4G extends MyView {
 
 	public void onDraw(Canvas canvas) {
 
-		canvas.drawColor(Color.WHITE);
+		canvas.drawColor(Color.rgb(71, 71, 81));
 		draw2_4Ggraph(canvas);
 	}
 
@@ -37,10 +37,10 @@ public class GraphCanvasView2_4G extends MyView {
 		yAxisLength = this.getHeight() - leftAndBottomMargin
 				- rightAndTopMargin;
 		Log.i("wifi zombie", "2.4G draw method");
-		canvas.drawColor(Color.WHITE);
+		canvas.drawColor(Color.rgb(71, 71, 81));
 
 		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.rgb(132, 132, 140));
 		paint.setStrokeWidth(1);
 		// signal line
 		for (int i = 1; i <= signalNum - 1; i++)
@@ -99,6 +99,7 @@ public class GraphCanvasView2_4G extends MyView {
 					graphPaint.setColor(Color.parseColor(colors[i % colorNum]));
 					canvas.drawOval(rect, graphPaint);
 					graphPaint.setStrokeWidth(2);
+					graphPaint.setStyle(Style.FILL);
 					canvas.drawText(data.getWifiInfoData(i).getSSID(),
 							(xAxisLength / chNum2_4G) * (ch + 1), ((strength
 									* (-1) - 20) / 10)
@@ -114,20 +115,26 @@ public class GraphCanvasView2_4G extends MyView {
 				}
 			}
 		}
-		paint.setColor(Color.WHITE);
+		paint.setColor(Color.rgb(71, 71, 81));
+		
 		canvas.drawRect(0, this.getHeight() - leftAndBottomMargin,
 				this.getWidth(), this.getHeight(), paint);
 		// 그래프 축 그리기
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.rgb(132, 132, 140));
 		paint.setStrokeWidth(2);
 		// y축
 		canvas.drawLine(leftAndBottomMargin, rightAndTopMargin,
 				leftAndBottomMargin, this.getHeight() - leftAndBottomMargin,
 				paint);
+		canvas.drawLine(this.getWidth() - rightAndTopMargin, rightAndTopMargin,
+				this.getWidth() - rightAndTopMargin, this.getHeight() - leftAndBottomMargin,
+				paint);
 		// x축
 		canvas.drawLine(leftAndBottomMargin, this.getHeight()
 				- leftAndBottomMargin, this.getWidth() - rightAndTopMargin,
 				this.getHeight() - leftAndBottomMargin, paint);
+		canvas.drawLine(leftAndBottomMargin, rightAndTopMargin, this.getWidth() - rightAndTopMargin,
+				rightAndTopMargin, paint);
 
 		paint.setTextSize(25);
 		for (int i = 1; i <= signalNum - 1; i++)

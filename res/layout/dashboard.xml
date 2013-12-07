@@ -1,33 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#474751"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txt_dashboard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5pt"
-        android:layout_marginTop="2pt"
-        android:textColor="#0ab5d7"
-        android:text="DashBoard"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="3pt"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginTop="3pt"
+        android:background="#00ffffff"
+        android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_marginTop="15pt"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/zombie" />
+            android:orientation="vertical" >
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginTop="5pt"
+                android:layout_marginBottom="2pt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Connected network Info"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#aaffffff" />
+            </RelativeLayout>
+<RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="30pt"
+                    android:layout_height="1pt"
+                    android:layout_centerHorizontal="true"
+                    android:text="date"
+                    android:background="#e84a5f" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_marginBottom="5pt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/dashboard_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="date"
+                    android:textColor="#aaffffff" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2pt" >
+
+            <com.todddavies.components.progressbar.ProgressWheel
+                android:id="@+id/dashboard_strength"
+                android:layout_width="270dp"
+                android:layout_height="270dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="10pt"
+                ProgressWheel:barColor="#e84a5f"
+                ProgressWheel:barLength="50dp"
+                ProgressWheel:barWidth="2dp"
+                ProgressWheel:rimColor="#33000000"
+                ProgressWheel:rimWidth="1dp"
+                ProgressWheel:spinSpeed="1dp"
+                ProgressWheel:text="SSID\nchannel\nbandwidth\nsignal"
+                ProgressWheel:textColor="#e84a5f"
+                ProgressWheel:textSize="30sp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5pt"
+             >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                
+                android:paddingRight="3pt"
+                android:layout_marginRight="2pt"
+                android:orientation="vertical"
+                android:layout_weight="1" >
+                 <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="BSSID"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+                     <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="MAC Addr"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+                     <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="IP Addr"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="Link Speed"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="Network ID"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+                      <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="Security Mode"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="Frequency"
+                            android:textColor="#84848c"
+                            android:textSize="8pt" />
+                    </RelativeLayout>
+
+            </LinearLayout>
+  <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#33000000" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="3pt"
+                android:layout_marginLeft="2pt"
+                android:orientation="vertical"
+                android:layout_weight="1" >
+                    
+                <TextView
+                        android:id="@+id/dashboard_bssid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BSSID"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+                    <TextView
+                        android:id="@+id/dashboard_mac"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MAC Addr"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+                    <TextView
+                        android:id="@+id/dashboard_ip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="IP Addr"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+                    <TextView
+                        android:id="@+id/dashboard_linkspeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Link Speed"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+                    <TextView
+                        android:id="@+id/dashboard_networkid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Network ID"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+                    <TextView
+                        android:id="@+id/dashboard_securitymode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Security Mode"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+                     <TextView
+                        android:id="@+id/dashboard_freq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Frequency"
+                        android:textColor="#aaffffff"
+                        android:textSize="8pt" />
+            </LinearLayout>
+            
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/dashboard_issecured"
@@ -37,26 +271,5 @@
         android:layout_marginRight="5pt"
         android:layout_marginTop="5pt"
         android:visibility="visible" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5pt" 
-        android:layout_marginLeft="5pt"
-        android:layout_marginRight="5pt" >
-        <TextView
-            android:id="@+id/txt_db_connected"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5pt" 
-            android:layout_marginBottom="5pt" 
-        	android:layout_marginLeft="5pt"
-        	android:layout_marginRight="5pt"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </RelativeLayout>
 
 </LinearLayout>
