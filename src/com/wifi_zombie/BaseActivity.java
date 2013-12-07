@@ -53,7 +53,7 @@ public class BaseActivity extends SlidingFragmentActivity implements OnArticleSe
 
     @Override
     public boolean onKeyDown(int keycode, KeyEvent e) {
-//    	Log.d("WIFI-Zombie", String.valueOf(keycode));
+    	Log.d("WIFI-Zombie", String.valueOf(keycode));
         switch(keycode) {
             case KeyEvent.KEYCODE_MENU:
             	getSlidingMenu().toggle(true);

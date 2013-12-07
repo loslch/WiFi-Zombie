@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#474751"  >
+    android:orientation="vertical" >
 
 <!--     <ImageView
         android:id="@+id/logo_zombie"
@@ -22,8 +21,8 @@
 		    android:id="@+id/txt_logo"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:text="Menu"
-		    android:textColor="#55ffffff"
+		    android:text="Wi-Fi Zombie"
+		    android:textColor="#0ab5d7"
 		    android:textAppearance="?android:attr/textAppearanceLarge" />
 	</RelativeLayout>
 

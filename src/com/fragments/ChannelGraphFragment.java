@@ -13,28 +13,23 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.webkit.WebView.FindListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
 public class ChannelGraphFragment extends MyFragment {
 	public static final int BANDWIDTH_2_4G = 2;
@@ -42,11 +37,10 @@ public class ChannelGraphFragment extends MyFragment {
     
     // layout var
     private View thisView;
-    private TextView changeBtn;
+    private Button changeBtn;
     private GraphCanvasView2_4G graphView2_4G;
     private GraphCanvasView5G graphView5G;
     private GraphCanvasView5G_Axis graphView5G_axis;
-    private TextView title;
     private SeekBar seekbar5G;
     
     private boolean is5G = false;
@@ -61,18 +55,16 @@ public class ChannelGraphFragment extends MyFragment {
 		screenHeight = dis.getHeight();
 		
 		// layout var 초기화
-		changeBtn = (TextView)thisView.findViewById(R.id.channelgraph_btn1);
+		changeBtn = (Button)thisView.findViewById(R.id.channelgraph_btn1);
 		graphView2_4G = (GraphCanvasView2_4G)thisView.findViewById(R.id.channelgraph_canvas);
 		graphView5G = (GraphCanvasView5G)thisView.findViewById(R.id.channelgraph_canvas5G);
 		graphView5G_axis = (GraphCanvasView5G_Axis)thisView.findViewById(R.id.channelgraph_canvas5G_axis);
 		seekbar5G = (SeekBar)thisView.findViewById(R.id.channelgraph_seekbar);
-		title = (TextView)thisView.findViewById(R.id.channelgraph_title);
+		
 		// canvas size setting
 		graphView5G_axis.setLayoutParams(new RelativeLayout.LayoutParams(graphView5G_axis.leftAndBottomMargin+2, LayoutParams.FILL_PARENT));
 		graphView5G.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth-graphView5G.leftAndBottomMargin)*(MyView.chNum5G/MyView.chInScreen5G)+graphView5G.leftAndBottomMargin, LayoutParams.FILL_PARENT));
 		
-		seekbar5G.setProgressDrawable(getActivity().getResources().getDrawable(R.drawable.progress_horizontal_seekbar));
-		seekbar5G.setThumb(getActivity().getResources().getDrawable(R.drawable.seek_mythumb));
 		seekbar5G.setMax((MyView.chNum5G-MyView.chInScreen5G)/2);
 		seekbar5G.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
@@ -108,8 +100,6 @@ public class ChannelGraphFragment extends MyFragment {
 					graphView5G_axis.setVisibility(View.INVISIBLE);
 					seekbar5G.setVisibility(View.INVISIBLE);
 					graphView2_4G.invalidate();
-					title.setText("2.4G Channel Graph");
-					changeBtn.setText("5G");
 				}
 				else	// 2.4G에서 5G로 바꿈
 				{
@@ -120,13 +110,10 @@ public class ChannelGraphFragment extends MyFragment {
 					graphView5G_axis.setVisibility(View.VISIBLE);
 					seekbar5G.setVisibility(View.VISIBLE);
 					graphView5G.invalidate();
-					title.setText("5G Channel Graph");
-					changeBtn.setText("2.4G");
 					
 				}
 			}
 		});
-	
         return thisView;
 	}
 	

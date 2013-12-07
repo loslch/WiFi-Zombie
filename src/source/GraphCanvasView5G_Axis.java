@@ -22,14 +22,14 @@ public class GraphCanvasView5G_Axis extends MyView{
 	public void onDraw(Canvas canvas) {
 		xAxisLength = this.getWidth() - leftAndBottomMargin - rightAndTopMargin;
 		yAxisLength = this.getHeight() - leftAndBottomMargin - rightAndTopMargin;
-		canvas.drawColor(Color.rgb(71, 71, 81));
+		canvas.drawColor(Color.WHITE);
 
 		Paint paint = new Paint();
-		paint.setColor(Color.rgb(132, 132, 140));
+		paint.setColor(Color.BLACK);
 
 
 		// 그래프 축 그리기
-		paint.setColor(Color.rgb(132, 132, 140));
+		paint.setColor(Color.BLACK);
 		paint.setStrokeWidth(2);
 		// y축
 		canvas.drawLine(leftAndBottomMargin, rightAndTopMargin,

@@ -1,7 +1,6 @@
 package com.fragments;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import source.APListAdapter;
@@ -30,9 +29,6 @@ public class AccessPointListFragment extends MyFragment{
 			Bundle savedInstanceState) {
 		thisView = inflater.inflate(R.layout.accesspointlist, null);
 		aplist = (ListView)thisView.findViewById(R.id.aplist);
-//		TextView date = (TextView) thisView.findViewById(R.id.aplist_date);
-//		Calendar cal = Calendar.getInstance();
-//		date.setText(cal.get(Calendar.YEAR)+"."+(cal.get(Calendar.MONTH)+1)+"."+cal.get(Calendar.DAY_OF_MONTH));
         return thisView;
 	}
 
