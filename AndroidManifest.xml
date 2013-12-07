@@ -10,6 +10,8 @@
     
     <!-- General -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- Google Maps API -->
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <!-- External storage for caching. -->
@@ -67,6 +69,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.wifi_zombie.FileDialog"
+            android:label="@string/app_name">
         </activity>
         <service android:name="WifiService">
             <intent-filter>

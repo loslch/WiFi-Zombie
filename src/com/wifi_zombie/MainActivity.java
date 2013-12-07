@@ -229,7 +229,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
     protected void onPause() {
     	isPuased = true;
         super.onPause();
-        unbindService(mConnection);
+        try {
+        	unbindService(mConnection);
+        } catch (Throwable t) {
+        	Log.e("MainActivity", "Failed to unbind from the service", t);
+        }
     }
     @Override
     protected void onDestroy() {	// 어플 끝나면 unbind함

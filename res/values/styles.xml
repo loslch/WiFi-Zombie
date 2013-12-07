@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -29,5 +29,58 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+    
+    <style name="btnStyleBeige" parent="@android:style/Widget.Button">
+       <item name="android:textSize">13sp</item>
+       <item name="android:textStyle">bold</item>
+       <item name="android:textColor">#636363</item>
+       <item name="android:gravity">center</item>
+       <item name="android:shadowColor">#000000</item>
+       <item name="android:shadowDx">1</item>
+       <item name="android:shadowDy">1</item>
+       <item name="android:shadowRadius">0.6</item>
+       <item name="android:background">@drawable/custom_btn_beige</item>
+       <item name="android:padding">0dip</item>
+   </style>
+
+    <style name="btnStyleSeagull" parent="@android:style/Widget.Button">
+       <item name="android:textSize">13sp</item>
+       <item name="android:textStyle">bold</item>
+       <item name="android:textColor">#626954</item>
+       <item name="android:gravity">center</item>
+       <item name="android:shadowColor">#000000</item>
+       <item name="android:shadowDx">1</item>
+       <item name="android:shadowDy">1</item>
+       <item name="android:shadowRadius">0.6</item>
+       <item name="android:background">@drawable/custom_btn_seagull</item>
+       <item name="android:padding">0dip</item>
+   </style>
+   
+    <style name="btnStylelemon_chiffon" parent="@android:style/Widget.Button">
+       <item name="android:textSize">15sp</item>
+       <item name="android:textStyle">bold</item>
+       <item name="android:textColor">#FFFFFF</item>
+       <item name="android:gravity">center</item>
+       <item name="android:shadowColor">#797a46</item>
+       <item name="android:shadowDx">1</item>
+       <item name="android:shadowDy">1</item>
+       <item name="android:shadowRadius">0.6</item>
+       <item name="android:background">@drawable/custom_btn_lemon_chiffon</item>
+       <item name="android:padding">0dip</item>
+   </style>
+   
+    <style name="btnStyleopal" parent="@android:style/Widget.Button">
+       <item name="android:textSize">13sp</item>
+       <item name="android:textStyle">bold</item>
+       <item name="android:textColor">#FFFFFF</item>
+       <item name="android:gravity">center</item>
+       <item name="android:shadowColor">#000000</item>
+       <item name="android:shadowDx">1</item>
+       <item name="android:shadowDy">1</item>
+       <item name="android:shadowRadius">0.6</item>
+       <item name="android:background">@drawable/custom_btn_opal</item>
+       <item name="android:padding">0dip</item>
+       <item name="android:alpha">70</item>
+   </style>
 
 </resources>

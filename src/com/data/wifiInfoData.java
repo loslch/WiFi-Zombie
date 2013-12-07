@@ -54,8 +54,7 @@ public class WifiInfoData {
 					.setStrength(data.getStrength())
 					.setChannel(data.getChannel())
 					.setBandwidth(data.getBandWidth())
-					.setSecurity(SecurityType.NONE)
-//					.setSecurity(data.getSecurityMode()))
+					.setSecurity(SecurityType.valueOf(data.getSecurityMode()))
 			);
 		}
 		
