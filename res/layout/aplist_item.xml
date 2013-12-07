@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#474751" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +36,7 @@
                 android:layout_marginLeft="2pt"
                 android:text="Network name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#e84a5f" />
+                android:textColor="#000000" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -49,9 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2pt"
                     android:text="BSSID"
-                    android:textSize="7pt"
-                    android:textColor="#84848c" 
-                     />
+                    android:textSize="7pt" />
 
                 <TextView
                     android:id="@+id/aplist_item_band"
@@ -59,8 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5pt"
                     android:text="Bandwidth"
-                    android:textColor="#84848c"
-                     />
+                    android:textColor="#6590df" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -78,8 +74,7 @@
             android:text="channel"
             android:layout_marginBottom="3pt"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#aaffffff"
-             />
+            android:textColor="#df656a" />
 
         <TextView
             android:id="@+id/aplist_item_signal"
@@ -88,8 +83,7 @@
             android:layout_marginLeft="5pt"
             android:text="frequency"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#aaffffff"
-             />
+            android:textColor="#000000" />
 
         <ProgressBar
             android:id="@+id/aplist_item_strength"

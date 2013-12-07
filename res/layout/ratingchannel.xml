@@ -2,43 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#474751" >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2pt"
-            android:layout_marginTop="5pt" >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Channel rating"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#aaffffff" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="30pt"
-                android:layout_height="1pt"
-                android:layout_centerHorizontal="true"
-                android:background="#e84a5f"
-                android:text="date" />
-        </RelativeLayout>
-    </LinearLayout>
+    android:orientation="vertical" >
 
     <ListView
         android:id="@+id/ratingchannel_channellist"
