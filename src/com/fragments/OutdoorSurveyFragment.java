@@ -84,7 +84,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		this.inflater = inflater.inflate(R.layout.activity_map, null, false);
+		this.inflater = inflater.inflate(R.layout.fragment_outdoor, null, false);
 		return this.inflater;
 	}
 
@@ -142,29 +142,6 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         // Initialize Location Manager
         locationManager = (LocationManager) 
 				getActivity().getSystemService(Context.LOCATION_SERVICE);
-        
-        if(locationManager != null)
-        {
-            boolean gpsIsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean networkIsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-             
-            if(gpsIsEnabled)
-            {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000L, 10F, this);
-            }
-            else if(networkIsEnabled)
-            {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000L, 10F, this);
-            }
-            else
-            {
-                //Show an error dialog that GPS is disabled...
-            }
-        }
-        else
-        {
-            //Show some generic error dialog because something must have gone wrong with location manager.
-        }
         
         // Initialize Current Location
         currentLocation = new Point();
@@ -228,6 +205,22 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         
        if(locationManager != null)
        {
+           boolean gpsIsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+           boolean networkIsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            
+           if(gpsIsEnabled)
+           {
+               locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000L, 10F, this);
+           }
+           else if(networkIsEnabled)
+           {
+               locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000L, 10F, this);
+           }
+           else
+           {
+               //Show an error dialog that GPS is disabled...
+           }
+           
            mMap.setMyLocationEnabled(true);
        }
 	}
@@ -398,13 +391,13 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
             	    fos.close();
             	    hasChanged = false;
             	    
-	            	Toast.makeText(context, "Success Export Survey Data.", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(context, "Exporting Survey Data is successed", Toast.LENGTH_SHORT).show();
             	} catch (FileNotFoundException e) {
             	    // handle exception
-	            	Toast.makeText(context, "Fail Export Survey Data.", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(context, "Exporting Survey Data is failed", Toast.LENGTH_SHORT).show();
             	} catch (IOException e) {
             	    // handle exception
-	            	Toast.makeText(context, "Fail Export Survey Data.", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(context, "Exporting Survey Data is failed", Toast.LENGTH_SHORT).show();
             	}
 
                 dialog.dismiss();
@@ -443,15 +436,15 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
             		fis.close();
             	} catch (FileNotFoundException e) {
             	    // handle exception
-	            	Toast.makeText(context, "Fail Import Survey Data.", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(context, "Importing Survey Data is failed", Toast.LENGTH_SHORT).show();
             	} catch (IOException e) {
             	    // handle exception
-	            	Toast.makeText(context, "Fail Import Survey Data.", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(context, "Importing Survey Data is failed", Toast.LENGTH_SHORT).show();
             	}
             	
             	if(wifiSurvey != null) {
             		if(wifiSurvey.getSurveyType() != SurveyType.OUTDOOR) {
-            			Toast.makeText(context, "Fail Import Survey Data.", Toast.LENGTH_SHORT).show();
+            			Toast.makeText(context, "Importing Survey Data is failed", Toast.LENGTH_SHORT).show();
             			return;
             		}
             		mMap.clear();
@@ -464,7 +457,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	            	lstWifiItem = new ArrayList<WifiItem>(wifiSurvey.getWifiItemListList());
 	            	restoreMarker();
 
-	            	Toast.makeText(context, "Success Import Survey Data.", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(context, "Importing Survey Data is successed", Toast.LENGTH_SHORT).show();
             	}
             	
                 dialog.dismiss();

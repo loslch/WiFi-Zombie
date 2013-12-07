@@ -208,7 +208,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         	}
         	currentScreen = clickedMenu;
     	}
-    	if(clickedMenu.equals("Outdoor Survey")) {
+    	if(clickedMenu.equals("Outdoor Survey")
+    		|| clickedMenu.equals("Indoor Survey")) {
     		getSlidingMenu().setSlidingEnabled(false);
     	} else {
     		getSlidingMenu().setSlidingEnabled(true);
