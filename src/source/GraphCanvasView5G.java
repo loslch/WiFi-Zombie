@@ -27,9 +27,9 @@ public class GraphCanvasView5G extends MyView{
 		yAxisLength = this.getHeight() - leftAndBottomMargin
 				- rightAndTopMargin;
 		
-		canvas.drawColor(Color.WHITE);
+		canvas.drawColor(Color.rgb(71, 71, 81));
 		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.rgb(132, 132, 140));
 		paint.setTextSize(30);
 
 		// signal line
@@ -73,11 +73,11 @@ public class GraphCanvasView5G extends MyView{
 				}
 			}
 		}
-		paint.setColor(Color.WHITE);
+		paint.setColor(Color.rgb(71, 71, 81));
 		canvas.drawRect(0, this.getHeight() - leftAndBottomMargin,
 				this.getLayoutParams().width, this.getHeight(), paint);
 		// x√‡
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.rgb(132, 132, 140));
 		paint.setStrokeWidth(2);
 		canvas.drawLine(leftAndBottomMargin, this.getHeight()
 				- leftAndBottomMargin, this.getLayoutParams().width

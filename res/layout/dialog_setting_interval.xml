@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#474751"
+    android:orientation="vertical" >
+
+    <RadioGroup
+        android:id="@+id/dialog_setting_interval_radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="5pt"
+         >
+
+        <RadioButton
+            android:id="@+id/dialog_setting_interval_radio5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="5 sec"
+            android:textColor="#84848c" />
+
+        <RadioButton
+            android:id="@+id/dialog_setting_interval_radio10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#84848c"
+            android:text="10 sec" />
+
+        <RadioButton
+            android:id="@+id/dialog_setting_interval_radio20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#84848c"
+            android:text="20 sec" />
+
+        <RadioButton
+            android:id="@+id/dialog_setting_interval_radio30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#84848c"
+            android:text="30 sec" />
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" >
+
+            <Button
+                android:id="@+id/dialog_setting_interval_btnOK"
+                android:layout_width="30pt"
+                android:layout_height="wrap_content"
+                android:textSize="5pt"
+                android:text="OK" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -22,8 +22,10 @@ public class WifiService extends Service {
 	public static final int MSG_UNREGISTER_CLIENT = 9992;
 	public static final int MSG_UPDATE_INFO = 9993;
 	public static final int MSG_REFRESH = 9994;
+	public static final int MSG_INTERVAL_CHANED = 9995;
+	
 	// Interval var default 10sec
-	private int interval = 10000;	// millisec 단위
+	private int interval = 5000;	// millisec 단위
 	private boolean isInterval = false;
 	private boolean isRefresh = false;
 	// WifiManager variable
@@ -64,6 +66,7 @@ public class WifiService extends Service {
 					case MSG_REGISTER_CLIENT:
 						ToActivityMessenger = msg.replyTo;
 						wifimanager.startScan();
+						interval = msg.arg1;
 						intervalHandler.sendEmptyMessage(interval);
 						break;
 					case MSG_REFRESH:

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="#474751">
+
+    <TextView
+        android:id="@+id/settinglist_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:layout_marginTop="3pt"
+        android:layout_marginBottom="3pt"
+        android:textColor="#e84a5f"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/settinglist_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5pt"
+        android:text="Medium Text"
+        android:textColor="#aaffffff"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/settinglist_item_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7pt"
+        android:text="Small Text"
+        android:textColor="#84848c"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</LinearLayout>
