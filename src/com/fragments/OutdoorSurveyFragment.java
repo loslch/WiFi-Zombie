@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -40,12 +41,12 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.wifi_zombie.FileDialog;
 import com.wifi_zombie.R;
 import com.wifi_zombie.SelectionMode;
@@ -73,6 +74,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     private SurveyType surveyType;
     private List<WifiItem> lstWifiItem;
     
+    private boolean enableHeatmap;
     private boolean hasChanged;
     private String pathFromFileDialog;
     private final int REQUEST_NEW = 0;
@@ -98,21 +100,31 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		initialize();
 		
 		// Restore state
-		if(savedInstanceState != null)
-			onRestoreInstanceState(savedInstanceState);
+		onRestoreInstanceState();
         
 		setUpMapIfNeeded();
 	}
 	
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		if(savedInstanceState.containsKey("outdoorSurvey")) {
-			WifiSurvey wifiSurvey = null;
-			try {
-				wifiSurvey = WifiSurvey.parseFrom(savedInstanceState.getByteArray("outdoorSurvey"));
-			} catch (InvalidProtocolBufferException e) {
-				e.printStackTrace();
-			}
-			
+	public void onRestoreInstanceState() {
+    	String filePath = "/sdcard/Application/wifi-zombie/wifi-zombie-outdoor-auto-save";
+    	WifiSurvey wifiSurvey = null;
+    	File file = new File(filePath);
+    	FileInputStream fis;
+    	
+    	if(!file.exists()) {
+    		return;
+    	}
+    	
+    	try {
+    		fis = new FileInputStream(file);
+        	wifiSurvey = WifiSurvey.parseFrom(fis);
+    		fis.close();
+    		file.delete();
+    	} 
+    	catch (FileNotFoundException e) {} 
+    	catch (IOException e) {}
+		
+		if(wifiSurvey != null) {
 			if(wifiSurvey != null && wifiSurvey.getWifiItemListCount()>0) {
 				surveyTitle = wifiSurvey.getTitle();
 				surveyCreator = wifiSurvey.getCreator();
@@ -123,15 +135,9 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 			}
 		}
 	}
-
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
-
-		savedInstanceState.putByteArray("outdoorSurvey", generateWifiSurvey().toByteArray());
-	}
     
 	private void initialize() {
+		enableHeatmap = true;
 		hasChanged = false;
 		context = getActivity().getApplicationContext();
 		
@@ -180,10 +186,10 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	private void restoreMarker() {
 		if(lstWifiItem.size() > 0) {
 			for (int i=0; i<lstWifiItem.size(); i++) {
-				Point share = new Point();
-				share.lat = lstWifiItem.get(i).getPosition().getX();
-				share.lng = lstWifiItem.get(i).getPosition().getY();
-				markOnMap(share, String.valueOf(i+1));
+				Point point = new Point();
+				point.lat = lstWifiItem.get(i).getPosition().getX();
+				point.lng = lstWifiItem.get(i).getPosition().getY();
+				markOnMap(lstWifiItem.get(i), point, String.valueOf(i+1));
 			}
 		}
 	}
@@ -228,6 +234,21 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	@Override
 	public void onDestroyView() {
 	    super.onDestroyView();
+	    
+    	String filePath = "/sdcard/Application/wifi-zombie/wifi-zombie-outdoor-auto-save";
+    	byte[] surveyStream = generateWifiSurvey().toByteArray();
+    	File file = new File(filePath);
+    	FileOutputStream fos;
+    	try {
+    		file.createNewFile();
+    	    fos = new FileOutputStream(file);
+    	    fos.write(surveyStream);
+    	    fos.flush();
+    	    fos.close();
+    	    hasChanged = false;
+    	}
+    	catch (FileNotFoundException e) {}
+    	catch (IOException e) {}
 
 	    Fragment f = getFragmentManager().findFragmentById(R.id.map);
 	    if (f != null) {
@@ -263,12 +284,20 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 //        	openFileDialog(this.REQUEST_LOAD);
 //        	loadSurvey();
             break;
-//        case R.id.action_outdoor_heatmap:
-//            toggleHeatmap();
-//            break;
-        case R.id.action_outdoor_ssid:
-        	selectCertainSSID();
+        case R.id.action_outdoor_heatmap:
+        	if(enableHeatmap) {
+        		enableHeatmap = false;
+        		item.setTitle("Enable Heatmap");
+        	} else {
+        		enableHeatmap = true;
+        		item.setTitle("Disable Heatmap");
+        	}
+        	mMap.clear();
+        	restoreMarker();
             break;
+//        case R.id.action_outdoor_ssid:
+//        	selectCertainSSID();
+//            break;
         default:
         	break;
         }
@@ -342,19 +371,19 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == getActivity().RESULT_OK) {
             pathFromFileDialog = data.getStringExtra(FileDialog.RESULT_PATH);
-            pathFromFileDialog.trim();
-            String[] filepath = pathFromFileDialog.split("/");
-            String filename = filepath[filepath.length-1];
-            if(filename.length() < 1 || !filename.matches("^[a-zA-Z0-9[.][_][-]]+")) {
-            	Toast.makeText(context, "File name is not allowed.", Toast.LENGTH_SHORT).show();
-            	return;
-            }
             
-            if(!pathFromFileDialog.endsWith(".zombie")) {
-            	pathFromFileDialog = pathFromFileDialog.concat(".zombie");
-            }
-
             if (requestCode == REQUEST_SAVE) {
+	            pathFromFileDialog.trim();
+	            String[] filepath = pathFromFileDialog.split("/");
+	            String filename = filepath[filepath.length-1];
+	            if(filename.length() < 1 || !filename.matches("^[a-zA-Z0-9[.][_][-]]+")) {
+	            	Toast.makeText(context, "File name is not allowed.", Toast.LENGTH_SHORT).show();
+	            	return;
+	            }
+	            
+	            if(!pathFromFileDialog.endsWith(".zombie")) {
+	            	pathFromFileDialog = pathFromFileDialog.concat(".zombie");
+	            }
             	saveSurvey();
             } else if (requestCode == REQUEST_LOAD) {
             	loadSurvey();
@@ -472,11 +501,6 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         builderSingle.show();
     }
     
-    private void toggleHeatmap() {
-      Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
-    	
-    }
-    
     private void selectCertainSSID() {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
         builderSingle.setIcon(R.drawable.icon);
@@ -558,7 +582,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		final int wifiDataIndex = Integer.parseInt(marker.getSnippet())-1;
 		WifiInfo wifiInfo = lstWifiItem.get(wifiDataIndex).getWifiInfo();		
         WifiDataListAdapter adapter = new WifiDataListAdapter(getActivity(), R.layout.aplist_item, wifiInfo.getWifiDataList());
-		
+
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
         builderSingle.setIcon(R.drawable.icon);
         builderSingle.setTitle("Wireless Networks");
@@ -610,15 +634,15 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		WifiItem currentWifiItem = getWifiItem();
 		lstWifiItem.add(currentWifiItem);
 		
-		Point Share = new Point();
-		Share.lat = currentWifiItem.getPosition().getX();
-		Share.lng = currentWifiItem.getPosition().getY();
+		Point point = new Point();
+		point.lat = currentWifiItem.getPosition().getX();
+		point.lng = currentWifiItem.getPosition().getY();
 		
-		markOnMap(Share, String.valueOf(lstWifiItem.size()));
+		markOnMap(currentWifiItem, point, String.valueOf(lstWifiItem.size()));
 		hasChanged = true;
 	}
 	
-	private void markOnMap(Point share, String name) {
+	private void markOnMap(WifiItem wifiItem, Point point, String name) {
 		// Bubble Icon 생성
 		IconGenerator mIconGenerator = new IconGenerator(context);
 		mIconGenerator.setStyle(mIconGenerator.STYLE_PURPLE);
@@ -627,7 +651,24 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		mMap.addMarker(new MarkerOptions()
 		.snippet(name)
 		.icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
-		.position(new LatLng(share.lat, share.lng)));
+		.position(new LatLng(point.lat, point.lng)));
+
+		if(enableHeatmap) {
+			addPoint(wifiItem, point);
+		}
+	}
+	 
+	public void addPoint(WifiItem wifiItem, Point point) {
+		int maxStrength = (int) (Math.abs(getMaxStrength(wifiItem)) % 100);
+
+		// Instantiates a new CircleOptions object and defines the center and radius
+		CircleOptions circleOptions = new CircleOptions()
+		    .center(new LatLng(point.lat, point.lng))
+		    .radius(maxStrength)
+		    .fillColor(Color.argb(maxStrength, 219, 46, 15))
+		    .strokeColor(Color.TRANSPARENT); //dont show the border to the circle
+		// Get back the mutable Circle
+		mMap.addCircle(circleOptions);
 	}
 	
 	private WifiItem getWifiItem() {
@@ -643,6 +684,19 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 				.build();
 		
 		return wifiItem;
+	}
+	
+	private int getMaxStrength(WifiItem wifiItem) {
+		int max = -99;
+		WifiInfo wifiInfo = wifiItem.getWifiInfo();
+		
+		for (WifiData data : wifiInfo.getWifiDataList()) {
+			if(data.getStrength() > max) {
+				max = data.getStrength();
+			}
+		}
+		
+		return max;
 	}
 	
 	private WifiSurvey generateWifiSurvey() {
@@ -665,11 +719,11 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 	}
 
 	private void moveToCurrentLocation() {
-//		Share.lat = 37.5665;	// SEOUL
-//		Share.lng = 126.9780;
+//		point.lat = 37.5665;	// SEOUL
+//		point.lng = 126.9780;
 		
 //		mMap.addMarker(new MarkerOptions()
-//				.position(new LatLng(Share.lat, Share.lng))
+//				.position(new LatLng(point.lat, point.lng))
 //				.title("Current Location"));
 
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(

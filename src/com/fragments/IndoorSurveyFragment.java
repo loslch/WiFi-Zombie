@@ -10,14 +10,17 @@ import java.util.Calendar;
 import java.util.List;
 
 import source.GLSurf;
+import source.IndoorMarker;
+import source.IndoorMarkerOptions;
 import source.MyFragment;
+import source.OnIndoorMarkerClickListener;
+import source.WifiDataListAdapter;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.opengl.GLSurfaceView;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,29 +28,34 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.data.WifiInfoData;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.ui.IconGenerator;
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.wifi_zombie.FileDialog;
 import com.wifi_zombie.R;
 import com.wifi_zombie.SelectionMode;
 import com.wifi_zombie.WifiZombieProto.WifiInfo;
+import com.wifi_zombie.WifiZombieProto.WifiInfo.WifiData;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.SurveyType;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem;
 import com.wifi_zombie.WifiZombieProto.WifiSurvey.WifiItem.Position;
 
-public class IndoorSurveyFragment extends MyFragment implements OnClickListener { 
+public class IndoorSurveyFragment extends MyFragment implements OnClickListener, OnIndoorMarkerClickListener { 
 	
-    // Our OpenGL Surfaceview
-    private GLSurfaceView glSurfaceView;
+    // Cocos-2d Surfaceview
+	protected GLSurf _glSurfaceView;
     private FrameLayout surfaceFrame;
     
     private View inflater;
@@ -59,13 +67,16 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
     private String surveyCreator;
     private Calendar surveyCreatedTime;
     private SurveyType surveyType;
+    private String surveyImportedImage;
     private List<WifiItem> lstWifiItem;
     
+    private boolean enableHeatmap;
     private boolean hasChanged;
     private String pathFromFileDialog;
     private final int REQUEST_NEW = 0;
     private final int REQUEST_SAVE = 1;
     private final int REQUEST_LOAD = 2;
+    private final int ID_GLVIEW = 0x0001;
     
     private Point currentLocation;
 
@@ -86,37 +97,43 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 		initialize();
 		
 		// Restore state
-		if(savedInstanceState != null)
-			onRestoreInstanceState(savedInstanceState);
+		onRestoreInstanceState();
         
 		setUpMapIfNeeded();
 	}
 	
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		if(savedInstanceState.containsKey("indoorSurvey")) {
-			WifiSurvey wifiSurvey = null;
-			try {
-				wifiSurvey = WifiSurvey.parseFrom(savedInstanceState.getByteArray("indoorSurvey"));
-			} catch (InvalidProtocolBufferException e) {
-				e.printStackTrace();
-			}
-			
+	public void onRestoreInstanceState() {
+    	String filePath = "/sdcard/Application/wifi-zombie/wifi-zombie-indoor-auto-save";
+    	WifiSurvey wifiSurvey = null;
+    	File file = new File(filePath);
+    	FileInputStream fis;
+    	
+    	if(!file.exists()) {
+    		return;
+    	}
+    	
+    	try {
+    		fis = new FileInputStream(file);
+        	wifiSurvey = WifiSurvey.parseFrom(fis);
+    		fis.close();
+    		file.delete();
+    	} 
+    	catch (FileNotFoundException e) {} 
+    	catch (IOException e) {}
+		
+		if(wifiSurvey != null) {
 			if(wifiSurvey != null && wifiSurvey.getWifiItemListCount()>0) {
 				surveyTitle = wifiSurvey.getTitle();
 				surveyCreator = wifiSurvey.getCreator();
 				surveyCreatedTime = Calendar.getInstance();
 				surveyCreatedTime.setTimeInMillis(wifiSurvey.getCreatedTime());
+				surveyImportedImage = wifiSurvey.getImagePath();
+				_glSurfaceView.setImportedImage(surveyImportedImage);
 				surveyType = wifiSurvey.getSurveyType();
 				lstWifiItem = new ArrayList<WifiItem>(wifiSurvey.getWifiItemListList());
+				
 			}
 		}
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {
-		super.onSaveInstanceState(savedInstanceState);
-
-		savedInstanceState.putByteArray("indoorSurvey", generateWifiSurvey().toByteArray());
 	}
     
 	private void initialize() {
@@ -124,10 +141,10 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 		context = getActivity().getApplicationContext(); 
 		
         // We create our Surfaceview for our OpenGL here.
-        glSurfaceView = new GLSurf(context);
+		_glSurfaceView = new GLSurf(getActivity());
+		_glSurfaceView.setId(ID_GLVIEW);
         surfaceFrame = (FrameLayout) inflater.findViewById(R.id.surfaceFrame);
-        surfaceFrame.addView(glSurfaceView);
-		
+        surfaceFrame.addView(_glSurfaceView);
 		
 		// Bind Layout & Event
 		btnSaveCurrentAPs = (Button) inflater.findViewById(R.id.btnSaveCurrentAPs);
@@ -140,20 +157,47 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
         surveyTitle = new String();
         surveyCreator = new String();
         surveyCreatedTime = Calendar.getInstance();
+		surveyImportedImage = new String();
         surveyType = SurveyType.INDOOR;
         lstWifiItem = new ArrayList<WifiItem>();
 	}
 
 	private void setUpMapIfNeeded() {
+		if(surveyTitle != null && !surveyTitle.isEmpty())
+			return;
+		
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("New Survey");
+        builderSingle.setPositiveButton("Load Survey", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	openFileDialog(REQUEST_LOAD);
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setNegativeButton("New Survey", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	openFileDialog(REQUEST_NEW);
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+
+		if (_glSurfaceView != null) {
+			_glSurfaceView.setOnIndoorMarkerClickLinstener(this);
+			restoreMarker();
+		}
 	}
 	
 	private void restoreMarker() {
 		if(lstWifiItem.size() > 0) {
 			for (int i=0; i<lstWifiItem.size(); i++) {
-				Point share = new Point();
-				share.x = lstWifiItem.get(i).getPosition().getX();
-				share.y = lstWifiItem.get(i).getPosition().getY();
-				markOnMap(share, String.valueOf(i+1));
+				Point point = new Point();
+				point.x = lstWifiItem.get(i).getPosition().getX();
+				point.y = lstWifiItem.get(i).getPosition().getY();
+				markOnMap(lstWifiItem.get(i), point, String.valueOf(i+1));
 			}
 		}
 	}
@@ -162,18 +206,33 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
     public void onPause()
     {
         super.onPause();
-        glSurfaceView.onPause();
+        _glSurfaceView.onPause();
     }
 	
 	@Override
 	public void onResume() {
 	    super.onResume();
-	    glSurfaceView.onResume();
+	    _glSurfaceView.onResume();
 	}
 
 	@Override
 	public void onDestroyView() {
 	    super.onDestroyView();
+	    
+    	String filePath = "/sdcard/Application/wifi-zombie/wifi-zombie-indoor-auto-save";
+    	byte[] surveyStream = generateWifiSurvey().toByteArray();
+    	File file = new File(filePath);
+    	FileOutputStream fos;
+    	try {
+    		file.createNewFile();
+    	    fos = new FileOutputStream(file);
+    	    fos.write(surveyStream);
+    	    fos.flush();
+    	    fos.close();
+    	    hasChanged = false;
+    	}
+    	catch (FileNotFoundException e) {}
+    	catch (IOException e) {}
 	}
 	
     @Override
@@ -203,12 +262,20 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 //        	openFileDialog(this.REQUEST_LOAD);
 //        	loadSurvey();
             break;
-//        case R.id.action_indoor_heatmap:
-//            toggleHeatmap();
-//            break;
-        case R.id.action_indoor_ssid:
-        	selectCertainSSID();
+        case R.id.action_indoor_heatmap:
+        	if(enableHeatmap) {
+        		enableHeatmap = false;
+        		item.setTitle("Enable Heatmap");
+        	} else {
+        		enableHeatmap = true;
+        		item.setTitle("Disable Heatmap");
+        	}
+//        	mMap.clear();
+        	restoreMarker();
             break;
+//        case R.id.action_indoor_ssid:
+//        	selectCertainSSID();
+//            break;
         default:
         	break;
         }
@@ -220,24 +287,42 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 		WifiItem currentWifiItem = getWifiItem();
 		lstWifiItem.add(currentWifiItem);
 		
-		Point Share = new Point();
-		Share.x = currentWifiItem.getPosition().getX();
-		Share.y = currentWifiItem.getPosition().getY();
+		Point point = new Point();
+		point.x = currentWifiItem.getPosition().getX();
+		point.y = currentWifiItem.getPosition().getY();
 		
-//		markOnMap(Share, String.valueOf(lstWifiItem.size()));
+		markOnMap(currentWifiItem, point, String.valueOf(lstWifiItem.size()));
 		hasChanged = true;
 	}
 	
-	private void markOnMap(Point share, String name) {
+	private void markOnMap(WifiItem wifiItem, Point point, String name) {
 		// Bubble Icon 생성
 		IconGenerator mIconGenerator = new IconGenerator(context);
 		mIconGenerator.setStyle(mIconGenerator.STYLE_PURPLE);
 		Bitmap iconBitmap = mIconGenerator.makeIcon(name);
 		
-//		mMap.addMarker(new MarkerOptions()
-//		.snippet(name)
-//		.icon(BitmapDescriptorFactory.fromBitmap(iconBitmap))
-//		.position(new LatLng(share.x, share.y)));
+		_glSurfaceView.addMarker(new IndoorMarkerOptions()
+		.snippet(name)
+		.icon(iconBitmap)
+		.setX((float)point.x)
+		.setY((float)point.y));
+
+		if(enableHeatmap) {
+			addPoint(wifiItem, point);
+		}
+	}
+	 
+	public void addPoint(WifiItem wifiItem, Point point) {
+		int maxStrength = (int) (Math.abs(getMaxStrength(wifiItem)) % 100);
+
+		// Instantiates a new CircleOptions object and defines the center and radius
+		CircleOptions circleOptions = new CircleOptions()
+		    .center(new LatLng(point.x, point.y))
+		    .radius(maxStrength)
+		    .fillColor(Color.argb(maxStrength, 219, 46, 15))
+		    .strokeColor(Color.TRANSPARENT); //dont show the border to the circle
+		// Get back the mutable Circle
+//		mMap.addCircle(circleOptions);
 	}
 	
 	private WifiItem getWifiItem() {
@@ -255,12 +340,26 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 		return wifiItem;
 	}
 	
+	private int getMaxStrength(WifiItem wifiItem) {
+		int max = -99;
+		WifiInfo wifiInfo = wifiItem.getWifiInfo();
+		
+		for (WifiData data : wifiInfo.getWifiDataList()) {
+			if(data.getStrength() > max) {
+				max = data.getStrength();
+			}
+		}
+		
+		return max;
+	}
+	
 	private WifiSurvey generateWifiSurvey() {
 		/* 다수의 Wifi Item과 Survey정보를 가진 Wifi Survey 생성 */
 		WifiSurvey.Builder wifiSurveyBuilder = WifiSurvey.newBuilder();
 		wifiSurveyBuilder.setTitle(surveyTitle)
 			.setCreatedTime(surveyCreatedTime.getTimeInMillis())
 			.setCreator(surveyCreator)
+			.setImagePath(surveyImportedImage)
 			.setSurveyType(surveyType.INDOOR);
 		for (WifiItem item : lstWifiItem) {
 			wifiSurveyBuilder.addWifiItemList(item);
@@ -289,6 +388,59 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 			break;
 		}
 	}
+	
+	@Override
+	public boolean onIndoorMarkerClick(final IndoorMarker marker) {
+		final int wifiDataIndex = Integer.parseInt(marker.getSnippet())-1;
+		WifiInfo wifiInfo = lstWifiItem.get(wifiDataIndex).getWifiInfo();		
+        WifiDataListAdapter adapter = new WifiDataListAdapter(getActivity(), R.layout.aplist_item, wifiInfo.getWifiDataList());
+		
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        builderSingle.setIcon(R.drawable.icon);
+        builderSingle.setTitle("Wireless Networks");
+        builderSingle.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                StringBuffer wifiInfoStr = new StringBuffer();
+                WifiData data = lstWifiItem.get(wifiDataIndex).getWifiInfo().getWifiData(which);
+                wifiInfoStr.append("SSID: ").append(data.getSsid()).append("\n")
+			    			.append("BSSID: ").append(data.getBssid()).append("\n")
+			    			.append("Channel: ").append(data.getChannel()).append("\n")
+			    			.append("Bandwidth: ").append(data.getBandwidth()).append("\n")
+			    			.append("Strength: ").append(data.getStrength()).append("\n")
+			    			.append("Security: ").append(data.getSecurity());
+                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+                builderInner.setMessage(wifiInfoStr.toString());
+                builderInner.setTitle(data.getSsid());
+                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builderInner.show();
+            }
+        });
+        builderSingle.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	int index = Integer.parseInt(marker.getSnippet())-1;
+            	lstWifiItem.remove(index);
+            	_glSurfaceView.clear();
+				restoreMarker();
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.show();
+				
+		return false;
+	}
     
     private void discardSurveyData(final int request) {
     	if(hasChanged) {
@@ -300,7 +452,7 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 	            public void onClick(DialogInterface dialog, int which) {
 	            	switch (request) {
 					case REQUEST_NEW:
-						newSurvey();
+						openFileDialog(request);
 						break;
 					case REQUEST_LOAD:
 						openFileDialog(request);
@@ -319,7 +471,7 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
     	} else {
         	switch (request) {
 			case REQUEST_NEW:
-				newSurvey();
+				openFileDialog(request);
 				break;
 			case REQUEST_LOAD:
 				openFileDialog(request);
@@ -332,8 +484,13 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
     	LayoutInflater inflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     	final View view = inflater.inflate(R.layout.dialog_new_survey, null);
     	
+    	final LinearLayout llNewSurvey = (LinearLayout) view.findViewById(R.id.dialog_new_survey);
     	final EditText etSurveyTitle = (EditText) view.findViewById(R.id.etSurveyTitle);
     	final EditText etSurveyCreator = (EditText) view.findViewById(R.id.etSurveyCreator);
+    	final TextView tvImagePath = new TextView(context);
+    	tvImagePath.setText("FILE NAME : " + pathFromFileDialog);
+    	llNewSurvey.addView(tvImagePath);
+    	final String strImportedImage = pathFromFileDialog;
     	
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
         builderSingle.setIcon(R.drawable.icon);
@@ -343,13 +500,16 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
             @Override
             public void onClick(DialogInterface dialog, int which) {
             	if(etSurveyTitle.getText().toString().isEmpty() ||
-            		etSurveyCreator.getText().toString().isEmpty()) {
+            		etSurveyCreator.getText().toString().isEmpty() ||
+            		strImportedImage.isEmpty()) {
             		Toast.makeText(context, "You must put the title and creator.", Toast.LENGTH_SHORT).show();
             		return;
             	}
             	surveyTitle = etSurveyTitle.getText().toString();
             	surveyCreator = etSurveyCreator.getText().toString();
             	surveyCreatedTime = Calendar.getInstance();
+				surveyImportedImage = strImportedImage;
+				_glSurfaceView.setImportedImage(strImportedImage);
             	surveyType = SurveyType.INDOOR;
             	lstWifiItem = new ArrayList<WifiItem>();
 //        		mMap.clear();
@@ -453,6 +613,8 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
 	            	surveyCreator = wifiSurvey.getCreator();
 	            	surveyCreatedTime = Calendar.getInstance();
 	            	surveyCreatedTime.setTimeInMillis(wifiSurvey.getCreatedTime());
+					surveyImportedImage = wifiSurvey.getImagePath();
+					_glSurfaceView.setImportedImage(surveyImportedImage);
 					surveyType = wifiSurvey.getSurveyType();
 	            	lstWifiItem = new ArrayList<WifiItem>(wifiSurvey.getWifiItemListList());
 	            	restoreMarker();
@@ -472,11 +634,6 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
         builderSingle.show();
     }
     
-    private void toggleHeatmap() {
-      Toast.makeText(context, "Heatmap Menu selected", Toast.LENGTH_SHORT).show();
-    	
-    }
-    
     private void selectCertainSSID() {
 		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
         builderSingle.setIcon(R.drawable.icon);
@@ -487,6 +644,7 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
             	surveyTitle = "";
             	surveyCreator = "";
             	surveyCreatedTime = Calendar.getInstance();
+            	surveyImportedImage = "";
                 dialog.dismiss();
             }
         });
@@ -512,11 +670,15 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
         intent.putExtra(FileDialog.CAN_SELECT_DIR, true);
         
         //alternatively you can set file filter
-        intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "zombie" });
         
         if(requestCode == this.REQUEST_SAVE) {
+            intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "zombie" });
         	intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_CREATE);
-        } else {
+        } else if(requestCode == this.REQUEST_LOAD) {
+            intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "zombie" });
+        	intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);
+        } else if(requestCode == this.REQUEST_NEW) {
+            intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png", "jpg", "bmp", "gif" });
         	intent.putExtra(FileDialog.SELECTION_MODE, SelectionMode.MODE_OPEN);
         }
         
@@ -527,22 +689,24 @@ public class IndoorSurveyFragment extends MyFragment implements OnClickListener 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == getActivity().RESULT_OK) {
             pathFromFileDialog = data.getStringExtra(FileDialog.RESULT_PATH);
-            pathFromFileDialog.trim();
-            String[] filepath = pathFromFileDialog.split("/");
-            String filename = filepath[filepath.length-1];
-            if(filename.length() < 1 || !filename.matches("^[a-zA-Z0-9[.][_][-]]+")) {
-            	Toast.makeText(context, "File name is not allowed.", Toast.LENGTH_SHORT).show();
-            	return;
-            }
             
-            if(!pathFromFileDialog.endsWith(".zombie")) {
-            	pathFromFileDialog = pathFromFileDialog.concat(".zombie");
-            }
-
             if (requestCode == REQUEST_SAVE) {
+	            pathFromFileDialog.trim();
+	            String[] filepath = pathFromFileDialog.split("/");
+	            String filename = filepath[filepath.length-1];
+	            if(filename.length() < 1 || !filename.matches("^[a-zA-Z0-9[.][_][-]]+")) {
+	            	Toast.makeText(context, "File name is not allowed.", Toast.LENGTH_SHORT).show();
+	            	return;
+	            }
+	            
+	            if(!pathFromFileDialog.endsWith(".zombie")) {
+	            	pathFromFileDialog = pathFromFileDialog.concat(".zombie");
+	            }
             	saveSurvey();
             } else if (requestCode == REQUEST_LOAD) {
             	loadSurvey();
+            } else if (requestCode == REQUEST_NEW) {
+            	newSurvey();
             }
 
         } else if (resultCode == getActivity().RESULT_CANCELED) {
