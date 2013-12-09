@@ -68,7 +68,7 @@
        <item name="android:background">@drawable/custom_btn_lemon_chiffon</item>
        <item name="android:padding">0dip</item>
    </style>
-   
+  <!--  
     <style name="btnStyleopal" parent="@android:style/Widget.Button">
        <item name="android:textSize">13sp</item>
        <item name="android:textStyle">bold</item>
@@ -82,5 +82,14 @@
        <item name="android:padding">0dip</item>
        <item name="android:alpha">70</item>
    </style>
-
+  -->
+    <style name="btnStyleopal" parent="@android:style/Widget.Button">
+       <item name="android:textSize">13sp</item>
+       <item name="android:textStyle">bold</item>
+       <item name="android:textColor">#FFFFFF</item>
+       <item name="android:gravity">center</item>
+       <item name="android:shadowRadius">0.6</item>
+       <item name="android:background">@drawable/ic_outdoor_button</item>
+       <item name="android:padding">0dip</item>
+   </style>
 </resources>

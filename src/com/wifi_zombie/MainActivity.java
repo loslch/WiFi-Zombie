@@ -87,7 +87,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public void onServiceDisconnected(ComponentName className) {
+			Log.i("wifi zombie", "service disconnected");
 			FromServiceMessenger = null;
+			ToServiceMessenger = null;
 		}
 	};
 
