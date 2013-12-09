@@ -76,39 +76,39 @@ public class SlideMenuFragment extends ListFragment implements OnItemClickListen
     	String[] children_2 = getResources().getStringArray(R.array.slide_menu_2);
     	
     	// nothing
-    	adapters[0].add(new SlideMenuItem(slide_menu[0], true, android.R.drawable.ic_menu_search));
-        adapters[0].add(new SlideMenuItem(slide_menu[1], true, android.R.drawable.ic_menu_mylocation));
-        adapters[0].add(new SlideMenuItem(slide_menu[2], true, android.R.drawable.ic_menu_mapmode));
-        adapters[0].add(new SlideMenuItem(slide_menu[3], true, android.R.drawable.ic_menu_view));
-        adapters[0].add(new SlideMenuItem(slide_menu[4], true, android.R.drawable.ic_menu_help));
+    	adapters[0].add(new SlideMenuItem(slide_menu[0], true, R.drawable.ic_menu_front));
+        adapters[0].add(new SlideMenuItem(slide_menu[1], true, R.drawable.ic_menu_front));
+        adapters[0].add(new SlideMenuItem(slide_menu[2], true, R.drawable.ic_menu_front));
+        adapters[0].add(new SlideMenuItem(slide_menu[3], true, R.drawable.ic_menu_front));
+        adapters[0].add(new SlideMenuItem(slide_menu[4], true, R.drawable.ic_menu_front));
         // on the spot open
-        adapters[1].add(new SlideMenuItem(slide_menu[0], true, android.R.drawable.ic_menu_search));
-        adapters[1].add(new SlideMenuItem(slide_menu[1], true, android.R.drawable.ic_menu_mylocation));
+        adapters[1].add(new SlideMenuItem(slide_menu[0], true, R.drawable.ic_menu_front));
+        adapters[1].add(new SlideMenuItem(slide_menu[1], true, R.drawable.ic_menu_front));
         adapters[1].add(new SlideMenuItem(children_1[0], false, -1));
         adapters[1].add(new SlideMenuItem(children_1[1], false, -1));
         adapters[1].add(new SlideMenuItem(children_1[2], false, -1));
-        adapters[1].add(new SlideMenuItem(slide_menu[2], true, android.R.drawable.ic_menu_mapmode));
-        adapters[1].add(new SlideMenuItem(slide_menu[3], true, android.R.drawable.ic_menu_view));
-        adapters[1].add(new SlideMenuItem(slide_menu[4], true, android.R.drawable.ic_menu_help));
+        adapters[1].add(new SlideMenuItem(slide_menu[2], true, R.drawable.ic_menu_front));
+        adapters[1].add(new SlideMenuItem(slide_menu[3], true, R.drawable.ic_menu_front));
+        adapters[1].add(new SlideMenuItem(slide_menu[4], true, R.drawable.ic_menu_front));
         //coverage open
-        adapters[2].add(new SlideMenuItem(slide_menu[0], true, android.R.drawable.ic_menu_search));
-        adapters[2].add(new SlideMenuItem(slide_menu[1], true, android.R.drawable.ic_menu_mylocation));
-        adapters[2].add(new SlideMenuItem(slide_menu[2], true, android.R.drawable.ic_menu_mapmode));
+        adapters[2].add(new SlideMenuItem(slide_menu[0], true, R.drawable.ic_menu_front));
+        adapters[2].add(new SlideMenuItem(slide_menu[1], true, R.drawable.ic_menu_front));
+        adapters[2].add(new SlideMenuItem(slide_menu[2], true, R.drawable.ic_menu_front));
         adapters[2].add(new SlideMenuItem(children_2[0], false, -1));
         adapters[2].add(new SlideMenuItem(children_2[1], false, -1));
-        adapters[2].add(new SlideMenuItem(slide_menu[3], true, android.R.drawable.ic_menu_view));
-        adapters[2].add(new SlideMenuItem(slide_menu[4], true, android.R.drawable.ic_menu_help));
+        adapters[2].add(new SlideMenuItem(slide_menu[3], true, R.drawable.ic_menu_front));
+        adapters[2].add(new SlideMenuItem(slide_menu[4], true, R.drawable.ic_menu_front));
         // on the spot , coverage open
-        adapters[3].add(new SlideMenuItem(slide_menu[0], true, android.R.drawable.ic_menu_search));
-        adapters[3].add(new SlideMenuItem(slide_menu[1], true, android.R.drawable.ic_menu_mylocation));
+        adapters[3].add(new SlideMenuItem(slide_menu[0], true, R.drawable.ic_menu_front));
+        adapters[3].add(new SlideMenuItem(slide_menu[1], true, R.drawable.ic_menu_front));
         adapters[3].add(new SlideMenuItem(children_1[0], false, -1));
         adapters[3].add(new SlideMenuItem(children_1[1], false, -1));
         adapters[3].add(new SlideMenuItem(children_1[2], false, -1));
-        adapters[3].add(new SlideMenuItem(slide_menu[2], true, android.R.drawable.ic_menu_mapmode));
+        adapters[3].add(new SlideMenuItem(slide_menu[2], true, R.drawable.ic_menu_front));
         adapters[3].add(new SlideMenuItem(children_2[0], false, -1));
         adapters[3].add(new SlideMenuItem(children_2[1], false, -1));
-        adapters[3].add(new SlideMenuItem(slide_menu[3], true, android.R.drawable.ic_menu_view));
-        adapters[3].add(new SlideMenuItem(slide_menu[4], true, android.R.drawable.ic_menu_help));
+        adapters[3].add(new SlideMenuItem(slide_menu[3], true, R.drawable.ic_menu_front));
+        adapters[3].add(new SlideMenuItem(slide_menu[4], true, R.drawable.ic_menu_front));
     	
         adapter = adapters[0];
         setListAdapter(adapter);

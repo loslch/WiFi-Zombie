@@ -20,6 +20,7 @@ public class APInfoDialogFragment extends DialogFragment {
 	private final int maxProgress = 100;
 	private int position;
 	private View thisView;
+	private View titleView;
 	private LayoutInflater layoutInflater;
 	private WifiInfoData wifiInfodata;
 	@SuppressLint("ValidFragment")
@@ -30,6 +31,7 @@ public class APInfoDialogFragment extends DialogFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		layoutInflater = getActivity().getLayoutInflater();
 		thisView = layoutInflater.inflate(R.layout.dialog_apinfo, null);
+		titleView = layoutInflater.inflate(R.layout.dialog_title_apinfo, null);
 		builder.setView(thisView);
 		
 		Button btn_OK = (Button)thisView.findViewById(R.id.dialog_apinfon_btnOK);
@@ -39,15 +41,20 @@ public class APInfoDialogFragment extends DialogFragment {
 				onClickOK();				
 			}
 		});
+		builder.setCustomTitle(titleView);
+		TextView tv_title = (TextView)titleView.findViewById(R.id.dialog_apinfo_title);
 		TextView tv_bssid = (TextView)thisView.findViewById(R.id.dialog_apinfon_bssid);
 		TextView tv_channel = (TextView)thisView.findViewById(R.id.dialog_apinfon_channel);
 		TextView tv_frequency = (TextView)thisView.findViewById(R.id.dialog_apinfon_frequency);
 		TextView tv_security = (TextView)thisView.findViewById(R.id.dialog_apinfon_security);
 		TextView tv_strength = (TextView)thisView.findViewById(R.id.dialog_apinfon_strength);
 		ProgressBar pb_strength = (ProgressBar)thisView.findViewById(R.id.dialog_apinfon_strengthProgress);
+		// progress bar setting
+		pb_strength.setProgressDrawable(getActivity().getResources().getDrawable(R.drawable.progress_horizontal_aplist));
 		
 		wifiInfodata = WifiInfoData.getInstance();
-		builder.setTitle(wifiInfodata.getWifiInfoData(position).getSSID());
+		tv_title.setText(wifiInfodata.getWifiInfoData(position).getSSID());
+
 		tv_bssid.setText(wifiInfodata.getWifiInfoData(position).getBSSID());
 		tv_channel.setText(wifiInfodata.getWifiInfoData(position).getChannel()+"");
 		tv_frequency.setText(wifiInfodata.getWifiInfoData(position).getFrequency()+"");

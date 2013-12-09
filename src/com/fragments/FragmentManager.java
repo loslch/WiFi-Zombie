@@ -34,9 +34,9 @@ public class FragmentManager {
 		ChannelGraph = new ChannelGraphFragment();
 		RatingChannel = new RatingChannelFragment();
 		IndoorSurvey = new IndoorSurveyFragment();
-		OutdoorSurvey = new OutdoorSurveyFragment();
-		Settings = new DashboardFragment();
-		Help = new DashboardFragment();
+		OutdoorSurvey = new DashboardFragment();
+		Settings = new SettingFragment();
+		Help = new HelpFragment();
 	}
 	
 	public Fragment getFragmentByMenu(String menu)

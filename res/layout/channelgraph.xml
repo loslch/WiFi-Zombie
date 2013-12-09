@@ -3,33 +3,81 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#474751" 
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/channelgraph_btn1"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="25pt"
-            android:layout_height="wrap_content"
-            android:text="2.4G" />
-
-        <SeekBar
-            android:id="@+id/channelgraph_seekbar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10pt"
-            android:layout_marginRight="10pt"
-            android:layout_weight="1"
-            android:visibility="invisible" />
-    </LinearLayout>
+            android:layout_centerInParent="true"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2pt"
+                    android:layout_marginTop="5pt" >
+
+                    <TextView
+                        android:id="@+id/channelgraph_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="2.4G Channel Graph"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#aaffffff" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="30pt"
+                        android:layout_height="1pt"
+                        android:layout_centerHorizontal="true"
+                        android:background="#e84a5f"
+                        android:text="date" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/channelgraph_seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10pt"
+                android:layout_marginRight="10pt"
+                android:layout_marginTop="2pt"
+                android:layout_weight="1"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/channelgraph_btn1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5pt"
+            android:layout_marginTop="5pt"
+			android:background="@drawable/ic_button"
+            android:layout_width="15pt"
+            android:layout_height="15pt"
+            android:textColor="#aaffffff"
+            android:text="5G"
+            android:gravity="center"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/channelgraph_graphlayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
         <source.GraphCanvasView2_4G
