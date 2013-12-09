@@ -46,7 +46,7 @@
         <!-- Mac -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCl6MJVHB1X2mzfNCnfWSc8IW8gk8pz71U" />
+            android:value="AIzaSyCqSi_bLxvhXiIQZhr9tm1QMIfq5AxQwmo" />
         <!-- Windows -->
 <!--         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
