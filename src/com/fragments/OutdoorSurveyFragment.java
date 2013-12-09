@@ -586,7 +586,7 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
         View builderSingleTitleView = View.inflate(context, R.layout.dialog_title_apinfo, null);
 		TextView tv_single_title = (TextView)builderSingleTitleView.findViewById(R.id.dialog_apinfo_title);
 		tv_single_title.setText("Detail");
-		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
 		builderSingle.setCustomTitle(builderSingleTitleView);
         builderSingle.setIcon(R.drawable.icon);
         builderSingle.setAdapter(adapter, new DialogInterface.OnClickListener() {
@@ -614,8 +614,12 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
                 dialog.dismiss();
             }
         });
-        builderSingle.show();
+        AlertDialog singleDialog = builderSingle.show();
 
+        Button btnDelete = singleDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button btnCreate = singleDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        btnDelete.setBackgroundColor(Color.rgb(71, 71, 81));
+        btnCreate.setBackgroundColor(Color.rgb(71, 71, 81));
 
 		return false;
 	}
