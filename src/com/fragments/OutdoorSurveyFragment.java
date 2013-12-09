@@ -583,30 +583,19 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
 		WifiInfo wifiInfo = lstWifiItem.get(wifiDataIndex).getWifiInfo();		
         WifiDataListAdapter adapter = new WifiDataListAdapter(getActivity(), R.layout.aplist_item, wifiInfo.getWifiDataList());
 
-		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+        View builderSingleTitleView = View.inflate(context, R.layout.dialog_title_apinfo, null);
+		TextView tv_single_title = (TextView)builderSingleTitleView.findViewById(R.id.dialog_apinfo_title);
+		tv_single_title.setText("Detail");
+		AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK);
+		builderSingle.setCustomTitle(builderSingleTitleView);
         builderSingle.setIcon(R.drawable.icon);
-        builderSingle.setTitle("Wireless Networks");
         builderSingle.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                StringBuffer wifiInfoStr = new StringBuffer();
                 WifiData data = lstWifiItem.get(wifiDataIndex).getWifiInfo().getWifiData(which);
-                wifiInfoStr.append("SSID: ").append(data.getSsid()).append("\n")
-			    			.append("BSSID: ").append(data.getBssid()).append("\n")
-			    			.append("Channel: ").append(data.getChannel()).append("\n")
-			    			.append("Bandwidth: ").append(data.getBandwidth()).append("\n")
-			    			.append("Strength: ").append(data.getStrength()).append("\n")
-			    			.append("Security: ").append(data.getSecurity());
-                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-                builderInner.setMessage(wifiInfoStr.toString());
-                builderInner.setTitle(data.getSsid());
-                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builderInner.show();
+            	WifiDataDialogFragment wifiDataDialog = new WifiDataDialogFragment();
+            	wifiDataDialog.setWifiData(data);
+            	wifiDataDialog.show(getFragmentManager(), "Detail");
             }
         });
         builderSingle.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
@@ -625,8 +614,13 @@ public class OutdoorSurveyFragment extends MyFragment implements LocationListene
                 dialog.dismiss();
             }
         });
-        builderSingle.show();
-				
+        AlertDialog singleDialog = builderSingle.show();
+
+        Button btnDelete = singleDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button btnCreate = singleDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        btnDelete.setBackgroundColor(Color.rgb(71, 71, 81));
+        btnCreate.setBackgroundColor(Color.rgb(71, 71, 81));
+
 		return false;
 	}
 

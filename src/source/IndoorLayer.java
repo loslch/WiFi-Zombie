@@ -51,6 +51,7 @@ public class IndoorLayer extends CCColorLayer
 
 		currentPointMarker = CCSprite.sprite("ic_marker_squared_red.png");
         currentPointMarker.setScale(1.0f);
+        addChild(currentPointMarker);
 	}
 	
 	@Override
@@ -67,7 +68,6 @@ public class IndoorLayer extends CCColorLayer
 		
 		Log.d("touch-began", touchPoint.x +", "+touchPoint.y+", count:"+event.getPointerCount());
 		
-		
 		return true;
 	}
 	
@@ -83,8 +83,9 @@ public class IndoorLayer extends CCColorLayer
 		long touchTime = (event.getEventTime()-event.getDownTime());
 		
 		if(!isMultitouch && touchTime > 1000) {
-			float[] currentPosition = getCurrentPosition();
-			
+    		CGPoint currentLocation = CCDirector.sharedDirector().convertToGL(
+    				CGPoint.ccp(event.getX()-positionDiff[0], event.getY()+positionDiff[1]));
+    		currentPointMarker.setPosition(currentLocation);
 		}
 		
 		selectedSprite = null;
