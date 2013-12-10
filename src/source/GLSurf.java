@@ -1,20 +1,15 @@
 package source;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 import org.cocos2d.types.ccColor4B;
 
+import android.app.Activity;
 import android.content.Context;
  
 public class GLSurf extends CCGLSurfaceView {
 	IndoorLayer indoorLayer;
-	
-	List<IndoorMarker> lstIndoorMarker;
-	OnIndoorMarkerClickListener onIndoorMarkerClickLinstener;
 
 	public GLSurf(Context context) {
         super(context);
@@ -23,7 +18,6 @@ public class GLSurf extends CCGLSurfaceView {
 		CCDirector.sharedDirector().setDisplayFPS(true);
 		CCDirector.sharedDirector().setAnimationInterval(1.0f / 60.0f);
 		
-		lstIndoorMarker = new ArrayList<IndoorMarker>();
 		indoorLayer = new IndoorLayer(ccColor4B.ccc4(0, 0, 0, 0));
 		CCScene scene = IndoorLayer.scene(indoorLayer);
 		CCDirector.sharedDirector().runWithScene(scene);
@@ -41,17 +35,25 @@ public class GLSurf extends CCGLSurfaceView {
     	indoorLayer.addMarker(markerOptions.getMarker());
     }
     
-    public void clear() {
-    	lstIndoorMarker.clear();
+    public void clearImage() {
+    	indoorLayer.clearImage();
+    }
+    
+    public void clearMarker() {
+    	indoorLayer.clearMarker();
     }
  
     public void setOnIndoorMarkerClickLinstener(
 			OnIndoorMarkerClickListener onIndoorMarkerClickLinstener) {
-		this.onIndoorMarkerClickLinstener = onIndoorMarkerClickLinstener;
+		indoorLayer.setOnIndoorMarkerClickLinstener(onIndoorMarkerClickLinstener);
 	}
     
 	public float[] getCurrentPosition() {
 		return indoorLayer.getCurrentPosition();
+	}
+
+	public void setCurrentActivity(Activity currentActivity) {
+		indoorLayer.setCurrentActivity(currentActivity);
 	}
 	
     @Override
